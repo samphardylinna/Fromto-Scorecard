@@ -13,36 +13,6 @@ const SubmitSchema = z.object({
   branch: z.enum(["book_call", "reading"]),
 });
 
-const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
-
-/**
- * Apps Script Web App URLs (`/exec`) answer a POST with a redirect to the
- * actual execution endpoint. `fetch`'s default redirect handling follows
- * that automatically but — per the fetch spec — downgrades a POST to a
- * bodyless GET on a 301/302/303, so Apps Script's `doPost` receives no
- * body at all (`e.postData` ends up `undefined`). This re-issues the POST
- * with its original body against the redirect target instead of letting
- * fetch silently drop it.
- */
-async function postFollowingRedirects(url: string, body: string, maxHops = 3): Promise<Response> {
-  let target = url;
-  for (let hop = 0; hop < maxHops; hop++) {
-    const response = await fetch(target, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body,
-      redirect: "manual",
-    });
-
-    if (!REDIRECT_STATUSES.has(response.status)) return response;
-
-    const location = response.headers.get("location");
-    if (!location) return response;
-    target = new URL(location, target).toString();
-  }
-  throw new Error(`Too many redirects following Apps Script webapp (>${maxHops})`);
-}
-
 /**
  * Validates a completed scorecard submission, geo-tags it server-side from
  * Vercel's edge headers (never asked as a form field), and forwards it to
@@ -78,16 +48,27 @@ export async function POST(request: NextRequest) {
   const location = region ? `${region}, ${country}` : country;
 
   try {
-    const upstream = await postFollowingRedirects(
-      webAppUrl,
-      JSON.stringify({
-        secret: sharedSecret,
-        email,
-        location,
-        ...rest,
-      })
-    );
+    // Sent as query params, not a JSON body: Apps Script Web Apps route a
+    // POST through an internal redirect to their real execution endpoint,
+    // and that hop is unreliable for POST bodies (both the spec-compliant
+    // auto-downgrade-to-GET, which drops the body entirely, and manually
+    // re-POSTing to the redirect target, which intermittently 404s).
+    // Query params survive that redirect either way, since Google carries
+    // them into the execution URL it generates.
+    const params = new URLSearchParams({
+      secret: sharedSecret,
+      email,
+      location,
+      name: rest.name,
+      overallScore: String(rest.overallScore),
+      cultureScore: String(rest.cultureScore),
+      marketingScore: String(rest.marketingScore),
+      productScore: String(rest.productScore),
+      finalFiveScore: String(rest.finalFiveScore),
+      branch: rest.branch,
+    });
 
+    const upstream = await fetch(`${webAppUrl}?${params.toString()}`, { method: "POST" });
     const upstreamText = await upstream.text();
 
     // Apps Script's ContentService always answers with HTTP 200, even when
