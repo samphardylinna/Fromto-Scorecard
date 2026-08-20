@@ -59,8 +59,27 @@ export async function POST(request: NextRequest) {
       }),
     });
 
-    if (!upstream.ok) {
-      console.error("Apps Script webapp returned", upstream.status, await upstream.text());
+    const upstreamText = await upstream.text();
+
+    // Apps Script's ContentService always answers with HTTP 200, even when
+    // the script itself reports an error (e.g. a secret mismatch) — so
+    // `upstream.ok` alone can't tell success from failure. Check the body.
+    let upstreamBody: unknown = null;
+    try {
+      upstreamBody = JSON.parse(upstreamText);
+    } catch {
+      // Non-JSON body (e.g. Google's HTML error page for an uncaught
+      // script exception) — treated as a failure below.
+    }
+
+    const upstreamError =
+      !upstream.ok ||
+      !upstreamBody ||
+      typeof upstreamBody !== "object" ||
+      "error" in upstreamBody;
+
+    if (upstreamError) {
+      console.error("Apps Script webapp rejected the submission", upstream.status, upstreamText);
       return NextResponse.json({ error: "Failed to record submission" }, { status: 502 });
     }
   } catch (error) {
