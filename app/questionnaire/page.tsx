@@ -63,9 +63,11 @@ export default function QuestionnairePage() {
     if (!question) return;
     const existing = answers[question.id];
     const current = existing && existing.kind === "multi" ? existing.optionIds : [];
-    const optionIds = current.includes(optionId)
-      ? current.filter((id) => id !== optionId)
-      : [...current, optionId];
+    const isSelected = current.includes(optionId);
+    if (!isSelected && question.maxSelections && current.length >= question.maxSelections) {
+      return; // at the cap — deselect one first
+    }
+    const optionIds = isSelected ? current.filter((id) => id !== optionId) : [...current, optionId];
     const next: Answer = { questionId: question.id, kind: "multi", optionIds };
     const updated = { ...answers, [question.id]: next };
     setAnswers(updated);
@@ -150,17 +152,29 @@ export default function QuestionnairePage() {
 
           {question.kind === "multi" && (
             <div className="flex flex-col gap-3">
-              {options.map((option) => (
-                <ChoiceCard
-                  key={option.id}
-                  kind="multi"
-                  label={option.label}
-                  selected={
-                    currentAnswer?.kind === "multi" && currentAnswer.optionIds.includes(option.id)
-                  }
-                  onSelect={() => toggleMulti(option.id)}
-                />
-              ))}
+              {question.maxSelections && (
+                <p className="text-sm text-jonas-text-muted">
+                  {(currentAnswer?.kind === "multi" ? currentAnswer.optionIds.length : 0)}/
+                  {question.maxSelections} selected
+                </p>
+              )}
+              {options.map((option) => {
+                const selectedIds = currentAnswer?.kind === "multi" ? currentAnswer.optionIds : [];
+                const selected = selectedIds.includes(option.id);
+                const atCap = Boolean(
+                  question.maxSelections && selectedIds.length >= question.maxSelections
+                );
+                return (
+                  <ChoiceCard
+                    key={option.id}
+                    kind="multi"
+                    label={option.label}
+                    selected={selected}
+                    disabled={!selected && atCap}
+                    onSelect={() => toggleMulti(option.id)}
+                  />
+                );
+              })}
             </div>
           )}
 

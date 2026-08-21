@@ -211,11 +211,12 @@ export const QUESTIONS: Question[] = [
   {
     id: "q13",
     order: 13,
-    prompt: "What's stopping you get there? (select as many as apply)",
+    prompt: "What's stopping you get there? (select up to 3)",
     kind: "multi",
     topics: [],
     randomizeOrder: false,
     randomizeOptions: true,
+    maxSelections: 3,
     options: [
       { id: "q13-a", label: "This is low priority for us", score: -3 },
       { id: "q13-b", label: "We don't have the time to focus on this", score: -1 },

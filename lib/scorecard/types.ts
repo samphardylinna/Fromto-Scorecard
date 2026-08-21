@@ -22,6 +22,8 @@ export interface Question {
   /** Whether this question's own options can be shuffled. */
   randomizeOptions: boolean;
   options?: AnswerOption[];
+  /** Multi-select only: caps how many options can be chosen at once. */
+  maxSelections?: number;
 }
 
 export interface Insight {
