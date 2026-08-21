@@ -18,7 +18,7 @@ export const QUESTIONS: Question[] = [
     kind: "single",
     topics: ["culture"],
     randomizeOrder: true,
-    randomizeOptions: true,
+    randomizeOptions: false,
     options: [
       { id: "q1-a", label: "0-1", score: 1 },
       { id: "q1-b", label: "2-5", score: 2 },
@@ -33,7 +33,7 @@ export const QUESTIONS: Question[] = [
     kind: "single",
     topics: ["culture"],
     randomizeOrder: true,
-    randomizeOptions: true,
+    randomizeOptions: false,
     options: [
       { id: "q2-a", label: "<60%", score: 1 },
       { id: "q2-b", label: "61-75%", score: 2 },
@@ -49,7 +49,7 @@ export const QUESTIONS: Question[] = [
     kind: "single",
     topics: ["culture"],
     randomizeOrder: true,
-    randomizeOptions: true,
+    randomizeOptions: false,
     options: [
       { id: "q3-a", label: "0-1", score: 1 },
       { id: "q3-b", label: "2-5", score: 2 },
@@ -64,7 +64,7 @@ export const QUESTIONS: Question[] = [
     kind: "single",
     topics: ["culture", "marketing"],
     randomizeOrder: true,
-    randomizeOptions: true,
+    randomizeOptions: false,
     options: [
       { id: "q4-a", label: "No", score: 2 },
       { id: "q4-b", label: "Yes", score: 4 },
@@ -77,7 +77,7 @@ export const QUESTIONS: Question[] = [
     kind: "single",
     topics: ["culture"],
     randomizeOrder: true,
-    randomizeOptions: true,
+    randomizeOptions: false,
     options: [
       { id: "q5-a", label: "<10%", score: 1 },
       { id: "q5-b", label: "10-25%", score: 2 },
@@ -92,7 +92,7 @@ export const QUESTIONS: Question[] = [
     kind: "single",
     topics: ["marketing"],
     randomizeOrder: true,
-    randomizeOptions: true,
+    randomizeOptions: false,
     options: [
       { id: "q6-a", label: "0", score: 1 },
       { id: "q6-b", label: "1", score: 2 },
@@ -108,7 +108,7 @@ export const QUESTIONS: Question[] = [
     kind: "single",
     topics: ["productMatching"],
     randomizeOrder: true,
-    randomizeOptions: true,
+    randomizeOptions: false,
     options: [
       { id: "q7-a", label: "0", score: 1 },
       { id: "q7-b", label: "1-5", score: 2 },
@@ -124,7 +124,7 @@ export const QUESTIONS: Question[] = [
     kind: "single",
     topics: ["productMatching"],
     randomizeOrder: true,
-    randomizeOptions: true,
+    randomizeOptions: false,
     options: [
       { id: "q8-a", label: "No", score: 2 },
       { id: "q8-b", label: "Yes", score: 4 },
@@ -137,7 +137,7 @@ export const QUESTIONS: Question[] = [
     kind: "single",
     topics: ["productMatching"],
     randomizeOrder: true,
-    randomizeOptions: true,
+    randomizeOptions: false,
     options: [
       { id: "q9-a", label: "No", score: 2 },
       { id: "q9-b", label: "Yes", score: 4 },
@@ -150,7 +150,7 @@ export const QUESTIONS: Question[] = [
     kind: "single",
     topics: ["marketing"],
     randomizeOrder: true,
-    randomizeOptions: true,
+    randomizeOptions: false,
     options: [
       { id: "q10-a", label: "<5%", score: 1 },
       { id: "q10-b", label: "5-10%", score: 2 },
