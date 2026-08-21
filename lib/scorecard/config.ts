@@ -267,11 +267,11 @@ export const FINAL_FIVE_THRESHOLD = 5;
  * diagram (which agreed exactly on the one case they overlapped: Q2's
  * "90-100%" answer routing to IN8's warning insight, not a positive one).
  *
- * A few trigger entries are marked "low geometric margin" below: the
- * connector's answer-side endpoint sat within ~1.5 units of a neighboring
- * option in the same question, so which specific option it points to is
- * less certain than the rest of this table. Worth a manual check against
- * the board before relying on those in production.
+ * A handful of connectors initially had ambiguous answer-side matches
+ * (within ~1.5 units of a neighboring option in the same question) — those
+ * were re-resolved against the actual drawn answer-box boundaries from the
+ * PDF's vector paths rather than label-to-label distance, which is
+ * decisive since each option occupies a distinct, non-overlapping y-range.
  */
 export const INSIGHTS: Insight[] = [
   {
@@ -286,7 +286,6 @@ export const INSIGHTS: Insight[] = [
   {
     id: "IN2",
     triggers: [
-      // low geometric margin (1.2 units vs. q1-b) — verify against the board
       { questionId: "q1", optionId: "q1-a" },
       { questionId: "q1", optionId: "q1-b" },
       { questionId: "q2", optionId: "q2-b" },
@@ -323,7 +322,6 @@ export const INSIGHTS: Insight[] = [
   {
     id: "IN6",
     triggers: [
-      // low geometric margin (1.1 units vs. q2-b) — verify against the board
       { questionId: "q2", optionId: "q2-a" },
       { questionId: "q4", optionId: "q4-a" },
       { questionId: "q5", optionId: "q5-a" },
@@ -348,9 +346,9 @@ export const INSIGHTS: Insight[] = [
       // this is the "high score, still a warning" case — Q2's best answer
       // (90-100%) deliberately routes here, confirmed independently twice
       { questionId: "q2", optionId: "q2-d" },
+      { questionId: "q5", optionId: "q5-c" },
       { questionId: "q5", optionId: "q5-d" },
-      // low geometric margin (0.6 units vs. q6-a) — verify against the board
-      { questionId: "q6", optionId: "q6-b" },
+      { questionId: "q6", optionId: "q6-a" },
       { questionId: "q10", optionId: "q10-b" },
     ],
     text: "You're putting a lot of time into onboarding your employees into the brand value and story, but it's not making its way through to the customers. Consider how you coach your team members on day-to-day tasks and strategic goals — is there a weak link in the story-telling chain?",
@@ -360,9 +358,7 @@ export const INSIGHTS: Insight[] = [
     triggers: [
       { questionId: "q7", optionId: "q7-a" },
       { questionId: "q7", optionId: "q7-b" },
-      // low geometric margin (1.3 units vs. q6-b) — verify against the board
-      { questionId: "q6", optionId: "q6-c" },
-      // low geometric margin (0.3 units vs. q10-b) — verify against the board
+      { questionId: "q6", optionId: "q6-b" },
       { questionId: "q10", optionId: "q10-a" },
     ],
     text: "Your brand is one of the key differentiators for your product and one of the things that allows you to charge more than your competitors. If you can't name many features that support your brand, your sales team and customers likely can't either — and won't be able to justify your pricing. Work with your product team to connect features to your brand values, then take that message to sales.",
@@ -372,7 +368,6 @@ export const INSIGHTS: Insight[] = [
     triggers: [
       { questionId: "q7", optionId: "q7-c" },
       { questionId: "q8", optionId: "q8-b" },
-      // low geometric margin (0.4 units vs. q8-b) — verify against the board
       { questionId: "q8", optionId: "q8-a" },
     ],
     text: "There's an art to knowing how many features you need in your products and services to make it feel like the brand. Work with your team to understand what your strategy demands your product has and what your brand requires — before you start any design work. The product is there to complete the strategy, not the strategy to sell the product.",
@@ -388,12 +383,7 @@ export const INSIGHTS: Insight[] = [
   {
     id: "IN12",
     triggers: [
-      // low geometric margin on both (0.8 and 0.6 units) — thematically this
-      // reads as a low-Q7-score insight ("design for those who love your
-      // brand, don't chase indifference"), so the true pair may be one
-      // option lower on each (q7-b/q7-a) than the raw geometry picked —
-      // verify against the board before trusting this one
-      { questionId: "q7", optionId: "q7-c" },
+      { questionId: "q7", optionId: "q7-a" },
       { questionId: "q7", optionId: "q7-b" },
     ],
     text: "Indifference is the most expensive and least effective outcome. Make sure your product is designed for those who love your brand, not just for what it has in it, but for what it says about them when they have it. You can't please everyone. You may have to annoy some people in the pursuit of delighting others.",
@@ -403,7 +393,6 @@ export const INSIGHTS: Insight[] = [
     triggers: [
       { questionId: "q6", optionId: "q6-d" },
       { questionId: "q9", optionId: "q9-a" },
-      // low geometric margin (0.9 units vs. q10-d) — verify against the board
       { questionId: "q10", optionId: "q10-c" },
     ],
     text: "Like attracts like. When the world knows who you are and where you're going, you'll find it much easier to attract customers, employees, and investors who match your business. Keep working with your team to find creative ways to broadcast the difference you're going to make.",
