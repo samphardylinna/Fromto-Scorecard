@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Poppins, Zilla_Slab } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/scorecard/Header";
-// TEMPORARY — dev-only page navigator, remove this import and its
-// render below before launch (see components/scorecard/DevNav.tsx)
-import DevNav from "@/components/scorecard/DevNav";
+// Dev-only page navigator — currently disabled, re-enable by uncommenting
+// this import and its render below (see components/scorecard/DevNav.tsx)
+// import DevNav from "@/components/scorecard/DevNav";
 
 const zillaSlab = Zilla_Slab({
   variable: "--font-zilla-slab",
@@ -30,8 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="flex min-h-full flex-col pb-12 text-black">
         <Header />
         {children}
-        {/* TEMPORARY — remove before launch */}
-        <DevNav />
+        {/* <DevNav /> */}
       </body>
     </html>
   );
