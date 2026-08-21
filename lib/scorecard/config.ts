@@ -14,7 +14,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "q1",
     order: 1,
-    prompt: "How many times a week do you talk with an employee about your brand's story?",
+    prompt: "How many times a week do you talk with an employee about your brand's story and values?",
     kind: "single",
     topics: ["culture"],
     randomizeOrder: true,
@@ -29,7 +29,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "q2",
     order: 2,
-    prompt: "Do all your employees know your brand values?",
+    prompt: "How many of your employees know your brand values?",
     kind: "single",
     topics: ["culture"],
     randomizeOrder: true,
@@ -60,7 +60,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "q4",
     order: 4,
-    prompt: "Can a 10 year old understand what your company does?",
+    prompt: "In less than a minute, can you explain to a 10-year-old the difference your company makes to the world?",
     kind: "single",
     topics: ["culture", "marketing"],
     randomizeOrder: true,
@@ -73,7 +73,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "q5",
     order: 5,
-    prompt: "How much of your onboarding process is used for brand story and values?",
+    prompt: "How much of your onboarding process is used for your brand story and values?",
     kind: "single",
     topics: ["culture"],
     randomizeOrder: true,
@@ -104,7 +104,7 @@ export const QUESTIONS: Question[] = [
     id: "q7",
     order: 7,
     prompt:
-      "How many features or designs in your product/service can you name which are there directly because of your brand story & values?",
+      "How many features in your product/service can you name that are directly there to support your brand story & brand values?",
     kind: "single",
     topics: ["productMatching"],
     randomizeOrder: true,

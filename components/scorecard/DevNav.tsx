@@ -42,7 +42,7 @@ export default function DevNav() {
       window.sessionStorage.setItem(ANSWERS_STORAGE_KEY, JSON.stringify(buildDummyAnswers()));
       window.sessionStorage.setItem(
         CONTACT_STORAGE_KEY,
-        JSON.stringify({ name: "Dev Preview", email: "dev-preview@example.com" })
+        JSON.stringify({ firstName: "Dev", lastName: "Preview", email: "dev-preview@example.com" })
       );
     }
     router.push(target);

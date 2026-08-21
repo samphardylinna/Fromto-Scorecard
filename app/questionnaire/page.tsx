@@ -10,7 +10,7 @@ import { FREE_TEXT_MAX_LENGTH } from "@/lib/scorecard/exportAnswers";
 import { getOrCreateSessionSeed, getSessionOptionOrder, getSessionQuestionOrder } from "@/lib/scorecard/randomize";
 import type { Answer } from "@/lib/scorecard/types";
 
-type Contact = { name: string; email: string };
+type Contact = { firstName: string; lastName: string; email: string };
 
 const CONTACT_STORAGE_KEY = "scorecard_contact";
 const ANSWERS_STORAGE_KEY = "scorecard_answers";
@@ -21,7 +21,7 @@ export default function QuestionnairePage() {
   const questions = useMemo(() => getSessionQuestionOrder(seed), [seed]);
 
   const [stepIndex, setStepIndex] = useState(0); // 0 = contact form, 1..N = questions
-  const [contact, setContact] = useState<Contact>({ name: "", email: "" });
+  const [contact, setContact] = useState<Contact>({ firstName: "", lastName: "", email: "" });
   const [contactError, setContactError] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Record<string, Answer>>({});
 
@@ -34,12 +34,14 @@ export default function QuestionnairePage() {
   const currentAnswer = question ? answers[question.id] : undefined;
 
   const canAdvance = isContactStep
-    ? contact.name.trim().length > 0 && contact.email.trim().length > 0
+    ? contact.firstName.trim().length > 0 &&
+      contact.lastName.trim().length > 0 &&
+      contact.email.trim().length > 0
     : question?.kind === "text" || currentAnswer !== undefined;
 
   function submitContact() {
-    if (!contact.name.trim() || !contact.email.trim()) {
-      setContactError("Please fill in both fields.");
+    if (!contact.firstName.trim() || !contact.lastName.trim() || !contact.email.trim()) {
+      setContactError("Please fill in all fields.");
       return;
     }
     if (!isWorkEmail(contact.email)) {
@@ -47,7 +49,12 @@ export default function QuestionnairePage() {
       return;
     }
     setContactError(null);
-    window.sessionStorage.setItem(CONTACT_STORAGE_KEY, JSON.stringify(contact));
+    const trimmedContact = {
+      firstName: contact.firstName.trim(),
+      lastName: contact.lastName.trim(),
+      email: contact.email,
+    };
+    window.sessionStorage.setItem(CONTACT_STORAGE_KEY, JSON.stringify(trimmedContact));
     setStepIndex(1);
   }
 
@@ -105,19 +112,28 @@ export default function QuestionnairePage() {
       {isContactStep && (
         <div className="flex flex-col gap-6">
           <h1 className="font-heading text-3xl font-bold">Before we start</h1>
-          <p className="font-serif text-jonas-text">
-            We&apos;ll email your results and a couple of tailored insights — no spam, just this.
-          </p>
-          <label className="flex flex-col gap-2 text-left font-heading text-sm font-semibold uppercase tracking-wide text-jonas-text-muted">
-            Your name
-            <input
-              type="text"
-              value={contact.name}
-              onChange={(e) => setContact({ ...contact, name: e.target.value })}
-              className="rounded-xl border-2 border-jonas-text-muted/30 px-4 py-3 font-serif text-lg text-black normal-case focus:border-black focus:outline-none"
-              autoComplete="name"
-            />
-          </label>
+          <div className="flex flex-col gap-6 sm:flex-row">
+            <label className="flex flex-1 flex-col gap-2 text-left font-heading text-sm font-semibold uppercase tracking-wide text-jonas-text-muted">
+              First name
+              <input
+                type="text"
+                value={contact.firstName}
+                onChange={(e) => setContact({ ...contact, firstName: e.target.value })}
+                className="rounded-xl border-2 border-jonas-text-muted/30 px-4 py-3 font-serif text-lg text-black normal-case focus:border-black focus:outline-none"
+                autoComplete="given-name"
+              />
+            </label>
+            <label className="flex flex-1 flex-col gap-2 text-left font-heading text-sm font-semibold uppercase tracking-wide text-jonas-text-muted">
+              Surname
+              <input
+                type="text"
+                value={contact.lastName}
+                onChange={(e) => setContact({ ...contact, lastName: e.target.value })}
+                className="rounded-xl border-2 border-jonas-text-muted/30 px-4 py-3 font-serif text-lg text-black normal-case focus:border-black focus:outline-none"
+                autoComplete="family-name"
+              />
+            </label>
+          </div>
           <label className="flex flex-col gap-2 text-left font-heading text-sm font-semibold uppercase tracking-wide text-jonas-text-muted">
             Your work email
             <input
@@ -128,6 +144,15 @@ export default function QuestionnairePage() {
               autoComplete="email"
             />
           </label>
+          <p className="text-sm text-jonas-text-muted">
+            By submitting your email, you consent to receive marketing communications from us. You
+            can withdraw your consent at any time via the unsubscribe link in any email we send. See
+            our{" "}
+            <span className="cursor-not-allowed underline" title="Privacy policy coming soon">
+              privacy policy
+            </span>{" "}
+            for details.
+          </p>
           {contactError && <p className="text-sm font-medium text-red-700">{contactError}</p>}
         </div>
       )}

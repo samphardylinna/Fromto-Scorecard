@@ -3,7 +3,8 @@ import { z } from "zod";
 import { isWorkEmail } from "@/lib/scorecard/consumerEmailDomains";
 
 const SubmitSchema = z.object({
-  name: z.string().trim().min(1).max(200),
+  firstName: z.string().trim().min(1).max(200),
+  lastName: z.string().trim().min(1).max(200),
   email: z.string().trim().email().max(320),
   overallScore: z.number(),
   cultureScore: z.number(),
@@ -64,7 +65,8 @@ export async function POST(request: NextRequest) {
       secret: sharedSecret,
       email,
       location,
-      name: scores.name,
+      firstName: scores.firstName,
+      lastName: scores.lastName,
       overallScore: String(scores.overallScore),
       cultureScore: String(scores.cultureScore),
       marketingScore: String(scores.marketingScore),

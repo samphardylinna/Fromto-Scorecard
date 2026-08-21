@@ -33,7 +33,9 @@ const CTA_COPY = {
 
 export default function ResultsPage() {
   const [answers, setAnswers] = useState<Answer[] | null>(null);
-  const [contact, setContact] = useState<{ name: string; email: string } | null>(null);
+  const [contact, setContact] = useState<{ firstName: string; lastName: string; email: string } | null>(
+    null
+  );
 
   useEffect(() => {
     const rawAnswers = window.sessionStorage.getItem(ANSWERS_STORAGE_KEY);
@@ -54,7 +56,8 @@ export default function ResultsPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: contact.name,
+        firstName: contact.firstName,
+        lastName: contact.lastName,
         email: contact.email,
         overallScore: scores.overall.scaled,
         cultureScore: scores.byTopic.culture.scaled,

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Zilla_Slab } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/scorecard/Header";
 // TEMPORARY — dev-only page navigator, remove this import and its
 // render below before launch (see components/scorecard/DevNav.tsx)
 import DevNav from "@/components/scorecard/DevNav";
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${zillaSlab.variable} ${poppins.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col pb-12 text-black">
+        <Header />
         {children}
         {/* TEMPORARY — remove before launch */}
         <DevNav />
