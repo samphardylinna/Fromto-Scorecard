@@ -11,6 +11,10 @@ const SubmitSchema = z.object({
   productScore: z.number(),
   finalFiveScore: z.number(),
   branch: z.enum(["book_call", "reading"]),
+  // Every question's answer, keyed by question id (e.g. "q1") — human-
+  // readable option labels, not internal ids. Capped generously per value;
+  // the free-text question (Q15) is separately capped client-side.
+  answers: z.record(z.string().max(20), z.string().max(1000)).default({}),
 });
 
 /**
@@ -55,17 +59,19 @@ export async function POST(request: NextRequest) {
     // re-POSTing to the redirect target, which intermittently 404s).
     // Query params survive that redirect either way, since Google carries
     // them into the execution URL it generates.
+    const { answers, ...scores } = rest;
     const params = new URLSearchParams({
       secret: sharedSecret,
       email,
       location,
-      name: rest.name,
-      overallScore: String(rest.overallScore),
-      cultureScore: String(rest.cultureScore),
-      marketingScore: String(rest.marketingScore),
-      productScore: String(rest.productScore),
-      finalFiveScore: String(rest.finalFiveScore),
-      branch: rest.branch,
+      name: scores.name,
+      overallScore: String(scores.overallScore),
+      cultureScore: String(scores.cultureScore),
+      marketingScore: String(scores.marketingScore),
+      productScore: String(scores.productScore),
+      finalFiveScore: String(scores.finalFiveScore),
+      branch: scores.branch,
+      ...answers,
     });
 
     const upstream = await fetch(`${webAppUrl}?${params.toString()}`, { method: "POST" });

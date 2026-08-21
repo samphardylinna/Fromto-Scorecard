@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Button from "@/components/scorecard/Button";
 import Gauge from "@/components/scorecard/Gauge";
+import { formatAnswersForExport } from "@/lib/scorecard/exportAnswers";
 import { selectInsights } from "@/lib/scorecard/insights";
 import { computeScores } from "@/lib/scorecard/scoring";
 import type { Answer, Topic } from "@/lib/scorecard/types";
@@ -61,6 +62,7 @@ export default function ResultsPage() {
         productScore: scores.byTopic.productMatching.scaled,
         finalFiveScore: scores.finalFive.total,
         branch: scores.finalFive.branch,
+        answers: formatAnswersForExport(answers),
       }),
     }).catch(() => {
       // Best-effort: a failed lead-capture POST shouldn't block the respondent

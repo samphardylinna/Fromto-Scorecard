@@ -6,6 +6,7 @@ import Button from "@/components/scorecard/Button";
 import ChoiceCard from "@/components/scorecard/ChoiceCard";
 import ProgressRail from "@/components/scorecard/ProgressRail";
 import { isWorkEmail } from "@/lib/scorecard/consumerEmailDomains";
+import { FREE_TEXT_MAX_LENGTH } from "@/lib/scorecard/exportAnswers";
 import { getOrCreateSessionSeed, getSessionOptionOrder, getSessionQuestionOrder } from "@/lib/scorecard/randomize";
 import type { Answer } from "@/lib/scorecard/types";
 
@@ -164,13 +165,19 @@ export default function QuestionnairePage() {
           )}
 
           {question.kind === "text" && (
-            <textarea
-              value={currentAnswer?.kind === "text" ? currentAnswer.value : ""}
-              onChange={(e) => setText(e.target.value)}
-              placeholder="Type your answer here..."
-              rows={5}
-              className="rounded-xl border-2 border-jonas-text-muted/30 px-4 py-3 font-serif text-lg focus:border-black focus:outline-none"
-            />
+            <div>
+              <textarea
+                value={currentAnswer?.kind === "text" ? currentAnswer.value : ""}
+                onChange={(e) => setText(e.target.value.slice(0, FREE_TEXT_MAX_LENGTH))}
+                placeholder="Type your answer here..."
+                maxLength={FREE_TEXT_MAX_LENGTH}
+                rows={5}
+                className="w-full rounded-xl border-2 border-jonas-text-muted/30 px-4 py-3 font-serif text-lg focus:border-black focus:outline-none"
+              />
+              <p className="mt-1 text-right text-sm text-jonas-text-muted">
+                {(currentAnswer?.kind === "text" ? currentAnswer.value.length : 0)}/{FREE_TEXT_MAX_LENGTH}
+              </p>
+            </div>
           )}
         </div>
       )}
