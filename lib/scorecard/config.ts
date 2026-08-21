@@ -259,101 +259,152 @@ export const QUESTIONS: Question[] = [
 export const FINAL_FIVE_THRESHOLD = 5;
 
 /**
- * Real copy pulled from the Miro board's Questionnaire frame, positioned
- * beside specific question blocks. Trigger conditions below are a first
- * pass inferred from each insight's vertical proximity to a question in
- * Miro — the board has no explicit connector confirming exact answer-level
- * triggers, so treat these mappings as a draft to review against the board
- * before launch, not a confirmed 1:1 link.
+ * Real copy and trigger conditions extracted from the Miro board's
+ * "Questionnaire logic" frame (IN1-IN13, connectors C1-C43) via its vector
+ * PDF export — each connector's answer-side and insight-side endpoints
+ * were matched by position to the nearest labeled answer/insight, cross-
+ * checked against a second, independently-rendered sample of the same
+ * diagram (which agreed exactly on the one case they overlapped: Q2's
+ * "90-100%" answer routing to IN8's warning insight, not a positive one).
+ *
+ * A few trigger entries are marked "low geometric margin" below: the
+ * connector's answer-side endpoint sat within ~1.5 units of a neighboring
+ * option in the same question, so which specific option it points to is
+ * less certain than the rest of this table. Worth a manual check against
+ * the board before relying on those in production.
  */
 export const INSIGHTS: Insight[] = [
   {
-    id: "insight-q1-a",
+    id: "IN1",
     triggers: [
       { questionId: "q1", optionId: "q1-a" },
       { questionId: "q1", optionId: "q1-b" },
+      { questionId: "q2", optionId: "q2-a" },
     ],
     text: "Make a conscious effort to coach team members to consider how to do a task in a manner that not just supports your brand values, but amplifies it — target making it a natural thought process for everyone in the company.",
   },
   {
-    id: "insight-q1-b",
+    id: "IN2",
     triggers: [
+      // low geometric margin (1.2 units vs. q1-b) — verify against the board
+      { questionId: "q1", optionId: "q1-a" },
       { questionId: "q1", optionId: "q1-b" },
-      { questionId: "q1", optionId: "q1-c" },
+      { questionId: "q2", optionId: "q2-b" },
+      { questionId: "q3", optionId: "q3-a" },
     ],
     text: "Take time to consider and write up how your actions and work habits support, or fail to support, the brand values. Be open with the team about this, especially your shortcomings. Show them you're working on it and encourage them to do the same. Remember, only bad stuff flows down the hill; the stuff worth having must be grown upwards.",
   },
   {
-    id: "insight-q2-a",
+    id: "IN3",
     triggers: [
-      { questionId: "q2", optionId: "q2-a" },
-      { questionId: "q2", optionId: "q2-b" },
+      { questionId: "q1", optionId: "q1-c" },
+      { questionId: "q3", optionId: "q3-b" },
+      { questionId: "q3", optionId: "q3-c" },
     ],
     text: "Continue taking the time to work with team members on how the brand values concretely affect their work. Share specific examples from your own experience of how you shape your work to support the brand.",
   },
   {
-    id: "insight-q2-b",
+    id: "IN4",
     triggers: [
-      { questionId: "q2", optionId: "q2-b" },
-      { questionId: "q2", optionId: "q2-c" },
+      { questionId: "q1", optionId: "q1-d" },
+      { questionId: "q3", optionId: "q3-d" },
     ],
     text: "Everything worth having in this world grows upwards; it doesn't flow down. Work with your leadership team to encourage them to consider how the brand values affect their work so it doesn't get stuck at your level. Give them the task of modelling it and teaching their team — the best way to learn something is to teach it.",
   },
   {
-    id: "insight-q3-a",
+    id: "IN5",
     triggers: [
-      { questionId: "q3", optionId: "q3-a" },
-      { questionId: "q3", optionId: "q3-b" },
+      { questionId: "q2", optionId: "q2-c" },
+      { questionId: "q2", optionId: "q2-d" },
+      { questionId: "q3", optionId: "q3-d" },
     ],
     text: "Everyone knows your brand values and story, but do they know how to apply them? Take the time to sit down with people and coach them through their day-to-day tasks, working through how the brand values and story affect the work they're doing.",
   },
   {
-    id: "insight-q4-a",
-    triggers: [{ questionId: "q4", optionId: "q4-a" }],
+    id: "IN6",
+    triggers: [
+      // low geometric margin (1.1 units vs. q2-b) — verify against the board
+      { questionId: "q2", optionId: "q2-a" },
+      { questionId: "q4", optionId: "q4-a" },
+      { questionId: "q5", optionId: "q5-a" },
+      { questionId: "q6", optionId: "q6-a" },
+    ],
     text: "Is your brand story where you come from, where you're going, and what you want to achieve in the world — told as a story? Or is it still on a piece of paper from the boardroom table? Work on presenting your strategy and story so even a child could understand it. People get inspired by stories, not statistics. Give them a story.",
   },
   {
-    id: "insight-q5-a",
+    id: "IN7",
     triggers: [
-      { questionId: "q5", optionId: "q5-a" },
+      { questionId: "q4", optionId: "q4-b" },
       { questionId: "q5", optionId: "q5-b" },
+      { questionId: "q6", optionId: "q6-b" },
+      { questionId: "q6", optionId: "q6-c" },
+      { questionId: "q10", optionId: "q10-a" },
     ],
     text: "A well-crafted story works for investors and employees as well as customers. How well do you see the same story repeated across your marketing? Make sure the same message is being repeated across all functions of the company.",
   },
   {
-    id: "insight-q6-a",
+    id: "IN8",
     triggers: [
-      { questionId: "q6", optionId: "q6-a" },
+      // this is the "high score, still a warning" case — Q2's best answer
+      // (90-100%) deliberately routes here, confirmed independently twice
+      { questionId: "q2", optionId: "q2-d" },
+      { questionId: "q5", optionId: "q5-d" },
+      // low geometric margin (0.6 units vs. q6-a) — verify against the board
       { questionId: "q6", optionId: "q6-b" },
+      { questionId: "q10", optionId: "q10-b" },
     ],
     text: "You're putting a lot of time into onboarding your employees into the brand value and story, but it's not making its way through to the customers. Consider how you coach your team members on day-to-day tasks and strategic goals — is there a weak link in the story-telling chain?",
   },
   {
-    id: "insight-q7-a",
+    id: "IN9",
     triggers: [
       { questionId: "q7", optionId: "q7-a" },
       { questionId: "q7", optionId: "q7-b" },
+      // low geometric margin (1.3 units vs. q6-b) — verify against the board
+      { questionId: "q6", optionId: "q6-c" },
+      // low geometric margin (0.3 units vs. q10-b) — verify against the board
+      { questionId: "q10", optionId: "q10-a" },
     ],
     text: "Your brand is one of the key differentiators for your product and one of the things that allows you to charge more than your competitors. If you can't name many features that support your brand, your sales team and customers likely can't either — and won't be able to justify your pricing. Work with your product team to connect features to your brand values, then take that message to sales.",
   },
   {
-    id: "insight-q7-b",
+    id: "IN10",
     triggers: [
-      { questionId: "q7", optionId: "q7-b" },
       { questionId: "q7", optionId: "q7-c" },
+      { questionId: "q8", optionId: "q8-b" },
+      // low geometric margin (0.4 units vs. q8-b) — verify against the board
+      { questionId: "q8", optionId: "q8-a" },
     ],
     text: "There's an art to knowing how many features you need in your products and services to make it feel like the brand. Work with your team to understand what your strategy demands your product has and what your brand requires — before you start any design work. The product is there to complete the strategy, not the strategy to sell the product.",
   },
   {
-    id: "insight-q8-a",
-    triggers: [{ questionId: "q8", optionId: "q8-a" }],
+    id: "IN11",
+    triggers: [
+      { questionId: "q8", optionId: "q8-a" },
+      { questionId: "q9", optionId: "q9-b" },
+    ],
     text: "We are all most sensitive when we're upset. Customer support is the most important part of your business for improving your brand perception. Work hard with the team so they know what the brand is, they experience the brand inside the company, and they have the freedom to make it happen.",
   },
   {
-    id: "insight-q10-a",
+    id: "IN12",
     triggers: [
-      { questionId: "q10", optionId: "q10-a" },
-      { questionId: "q10", optionId: "q10-b" },
+      // low geometric margin on both (0.8 and 0.6 units) — thematically this
+      // reads as a low-Q7-score insight ("design for those who love your
+      // brand, don't chase indifference"), so the true pair may be one
+      // option lower on each (q7-b/q7-a) than the raw geometry picked —
+      // verify against the board before trusting this one
+      { questionId: "q7", optionId: "q7-c" },
+      { questionId: "q7", optionId: "q7-b" },
+    ],
+    text: "Indifference is the most expensive and least effective outcome. Make sure your product is designed for those who love your brand, not just for what it has in it, but for what it says about them when they have it. You can't please everyone. You may have to annoy some people in the pursuit of delighting others.",
+  },
+  {
+    id: "IN13",
+    triggers: [
+      { questionId: "q6", optionId: "q6-d" },
+      { questionId: "q9", optionId: "q9-a" },
+      // low geometric margin (0.9 units vs. q10-d) — verify against the board
+      { questionId: "q10", optionId: "q10-c" },
     ],
     text: "Like attracts like. When the world knows who you are and where you're going, you'll find it much easier to attract customers, employees, and investors who match your business. Keep working with your team to find creative ways to broadcast the difference you're going to make.",
   },
