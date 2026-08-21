@@ -21,7 +21,7 @@ const TOPIC_LABELS: Record<Topic, string> = {
 const CTA_COPY = {
   book_call: {
     heading: "Why don't you talk with us more to see how we can help you develop further?",
-    action: "Book a time with us",
+    action: "Start the conversation",
     href: "#", // placeholder — booking link to be supplied
   },
   reading: {
