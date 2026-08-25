@@ -4,8 +4,15 @@ import type { Insight, Question } from "./types";
  * Source of truth for the scorecard. Converted once from `Scorecard .xlsx`
  * (Sheet1) cross-checked against the Miro board's Questionnaire frame —
  * the spreadsheet's own numeric ranges (e.g. "2-5", "6-10") were corrupted
- * into calendar dates by Excel's autoformat, so option wording here follows
- * Miro; point values follow the spreadsheet.
+ * into calendar dates by Excel's autoformat, so option wording originally
+ * followed Miro; point values follow the spreadsheet.
+ *
+ * Option labels for q1-3, q5-7, and q10, plus q7's prompt, were later
+ * replaced with friendlier phrasing from a follow-up `New Questions.xlsx`
+ * (its "Answer options" column reproduces the old labels — again mangled
+ * into dates by Excel — purely as a lookup key; "New Answer Text" is the
+ * actual replacement). Underlying option ids and point values are
+ * unchanged, so scoring and insight triggers aren't affected.
  *
  * Re-generate this file by hand if the spreadsheet or Miro board changes —
  * nothing reads either source at runtime.
@@ -20,10 +27,10 @@ export const QUESTIONS: Question[] = [
     randomizeOrder: true,
     randomizeOptions: false,
     options: [
-      { id: "q1-a", label: "0-1", score: 1 },
-      { id: "q1-b", label: "2-5", score: 2 },
-      { id: "q1-c", label: "6-10", score: 3 },
-      { id: "q1-d", label: "10+", score: 4 },
+      { id: "q1-a", label: "Pretty much never", score: 1 },
+      { id: "q1-b", label: "A few times a week", score: 2 },
+      { id: "q1-c", label: "At least once a day", score: 3 },
+      { id: "q1-d", label: "More than twice a day", score: 4 },
     ],
   },
   {
@@ -35,10 +42,10 @@ export const QUESTIONS: Question[] = [
     randomizeOrder: true,
     randomizeOptions: false,
     options: [
-      { id: "q2-a", label: "<60%", score: 1 },
-      { id: "q2-b", label: "61-75%", score: 2 },
-      { id: "q2-c", label: "76-90%", score: 3 },
-      { id: "q2-d", label: "90-100%", score: 4 },
+      { id: "q2-a", label: "Less than half", score: 1 },
+      { id: "q2-b", label: "More than half, but still a lot don't", score: 2 },
+      { id: "q2-c", label: "Most of them", score: 3 },
+      { id: "q2-d", label: "Yes, all of them", score: 4 },
     ],
   },
   {
@@ -51,10 +58,10 @@ export const QUESTIONS: Question[] = [
     randomizeOrder: true,
     randomizeOptions: false,
     options: [
-      { id: "q3-a", label: "0-1", score: 1 },
-      { id: "q3-b", label: "2-5", score: 2 },
-      { id: "q3-c", label: "6-10", score: 3 },
-      { id: "q3-d", label: "10+", score: 4 },
+      { id: "q3-a", label: "They don't affect my work", score: 1 },
+      { id: "q3-b", label: "A few come to mind", score: 2 },
+      { id: "q3-c", label: "I can easily name 5 to 10 ways", score: 3 },
+      { id: "q3-d", label: "More than 10", score: 4 },
     ],
   },
   {
@@ -79,10 +86,10 @@ export const QUESTIONS: Question[] = [
     randomizeOrder: true,
     randomizeOptions: false,
     options: [
-      { id: "q5-a", label: "<10%", score: 1 },
-      { id: "q5-b", label: "10-25%", score: 2 },
-      { id: "q5-c", label: "25-50%", score: 3 },
-      { id: "q5-d", label: ">50%", score: 4 },
+      { id: "q5-a", label: "Hardly any time", score: 1 },
+      { id: "q5-b", label: "Around about a quarter", score: 2 },
+      { id: "q5-c", label: "About a third", score: 3 },
+      { id: "q5-d", label: "More than half of the time, this is very important for us", score: 4 },
     ],
   },
   {
@@ -94,26 +101,26 @@ export const QUESTIONS: Question[] = [
     randomizeOrder: true,
     randomizeOptions: false,
     options: [
-      { id: "q6-a", label: "0", score: 1 },
-      { id: "q6-b", label: "1", score: 2 },
-      { id: "q6-c", label: "2-4", score: 3 },
-      { id: "q6-d", label: "5+", score: 4 },
+      { id: "q6-a", label: "None", score: 1 },
+      { id: "q6-b", label: "Maybe one", score: 2 },
+      { id: "q6-c", label: "A good few", score: 3 },
+      { id: "q6-d", label: "More than half", score: 4 },
     ],
   },
   {
     id: "q7",
     order: 7,
     prompt:
-      "How many features in your product/service can you name that are directly there to support your brand story & brand values?",
+      "Your product/service should prove your brand to be true, how many features can you name which support your brand?",
     kind: "single",
     topics: ["productMatching"],
     randomizeOrder: true,
     randomizeOptions: false,
     options: [
-      { id: "q7-a", label: "0", score: 1 },
-      { id: "q7-b", label: "1-5", score: 2 },
-      { id: "q7-c", label: "6-10", score: 3 },
-      { id: "q7-d", label: "11+", score: 4 },
+      { id: "q7-a", label: "None", score: 1 },
+      { id: "q7-b", label: "Less than 5", score: 2 },
+      { id: "q7-c", label: "Between 6 and 10", score: 3 },
+      { id: "q7-d", label: "More than 10", score: 4 },
     ],
   },
   {
@@ -152,10 +159,10 @@ export const QUESTIONS: Question[] = [
     randomizeOrder: true,
     randomizeOptions: false,
     options: [
-      { id: "q10-a", label: "<5%", score: 1 },
-      { id: "q10-b", label: "5-10%", score: 2 },
-      { id: "q10-c", label: "10-15%", score: 3 },
-      { id: "q10-d", label: ">20%", score: 4 },
+      { id: "q10-a", label: "Hardly anything", score: 1 },
+      { id: "q10-b", label: "A little bit", score: 2 },
+      { id: "q10-c", label: "Quite a lot but less than 25%", score: 3 },
+      { id: "q10-d", label: "More than 25%", score: 4 },
     ],
   },
 
