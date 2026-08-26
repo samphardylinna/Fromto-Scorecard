@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { isWorkEmail } from "@/lib/scorecard/consumerEmailDomains";
 
 const SubmitSchema = z.object({
   // Stable per completed attempt (generated client-side once, at the start
@@ -41,10 +40,6 @@ export async function POST(request: NextRequest) {
   }
 
   const { email, ...rest } = parsed.data;
-
-  if (!isWorkEmail(email)) {
-    return NextResponse.json({ error: "Please use a work email address" }, { status: 400 });
-  }
 
   const webAppUrl = process.env.SCORECARD_SHEETS_WEBAPP_URL;
   const sharedSecret = process.env.SCORECARD_SHEETS_SHARED_SECRET;

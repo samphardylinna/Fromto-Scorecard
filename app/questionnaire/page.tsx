@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/scorecard/Button";
 import ChoiceCard from "@/components/scorecard/ChoiceCard";
 import ProgressRail from "@/components/scorecard/ProgressRail";
-import { isWorkEmail } from "@/lib/scorecard/consumerEmailDomains";
 import { FREE_TEXT_MAX_LENGTH } from "@/lib/scorecard/exportAnswers";
 import { getOrCreateSessionSeed, getSessionOptionOrder, getSessionQuestionOrder } from "@/lib/scorecard/randomize";
 import type { Answer } from "@/lib/scorecard/types";
@@ -43,10 +42,6 @@ export default function QuestionnairePage() {
   function submitContact() {
     if (!contact.firstName.trim() || !contact.lastName.trim() || !contact.email.trim()) {
       setContactError("Please fill in all fields.");
-      return;
-    }
-    if (!isWorkEmail(contact.email)) {
-      setContactError("Please use your work email address, not a personal one.");
       return;
     }
     setContactError(null);

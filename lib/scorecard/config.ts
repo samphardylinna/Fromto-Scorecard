@@ -111,7 +111,7 @@ export const QUESTIONS: Question[] = [
     id: "q7",
     order: 7,
     prompt:
-      "Your product/service should prove your brand to be true, how many features can you name which support your brand?",
+      "Your product/service should prove your brand to be true, how many product features can you name which do that?",
     kind: "single",
     topics: ["productMatching"],
     randomizeOrder: true,

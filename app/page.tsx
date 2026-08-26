@@ -22,21 +22,31 @@ export default function LandingPage() {
         Do you want a brand that goes much deeper than just the surface?
       </h1>
 
-      <p className="mt-10 w-full text-balance text-left font-heading text-lg font-semibold text-jonas-text-muted sm:text-xl">
-        This test will help you measure and improve your...
+      <p className="mt-10 w-full text-balance text-center font-heading text-lg font-semibold text-jonas-text-muted sm:text-xl">
+        These 15 questions will help you measure and improve...
       </p>
 
-      <div className="mt-10 flex w-full flex-col items-center gap-8 sm:flex-row sm:items-center sm:justify-between">
-        <ul className="flex flex-col gap-3 text-left font-serif text-lg text-jonas-text">
+      <div className="mt-10 flex w-full flex-col items-center gap-8">
+        <ul className="flex w-full flex-col gap-3 font-serif text-lg text-jonas-text">
           {TOPICS.map((topic) => (
-            <li key={topic} className="flex items-start gap-2 rounded-xl bg-jonas-cream px-4 py-3">
-              <span className="mt-1 h-2 w-2 flex-none rounded-full bg-brand-yellow" aria-hidden />
+            <li
+              key={topic}
+              className="flex items-center justify-center gap-2 rounded-xl bg-jonas-cream px-4 py-3"
+            >
+              <span className="h-2 w-2 flex-none rounded-full bg-brand-yellow" aria-hidden />
               {topic}
             </li>
           ))}
         </ul>
+        <p className="text-balance font-heading text-lg font-semibold text-jonas-text-muted sm:text-xl">
+          It only takes 3 minutes
+        </p>
+      </div>
 
-        <Button href="/questionnaire">Take the test now</Button>
+      <div className="mt-16">
+        <Button href="/questionnaire" className="px-12 py-5 text-xl">
+          Take the test now
+        </Button>
       </div>
 
       <div className="mt-14 flex items-center justify-between gap-4 rounded-2xl border border-jonas-text-muted/20 bg-white px-6 py-5 text-left">
@@ -49,14 +59,6 @@ export default function LandingPage() {
           <FounderHeadshot src="/images/sam-headshot.jpg" alt="Sam Hardy-Linna" />
           <FounderHeadshot src="/images/jonas-headshot.jpg" alt="Jonas Hakaniemi" />
         </div>
-      </div>
-
-      <h2 className="mt-16 text-balance font-heading text-2xl font-bold sm:text-3xl">
-        Take the test now and find out where you&apos;re doing well.
-      </h2>
-
-      <div className="mt-8">
-        <Button href="/questionnaire">Take the test now</Button>
       </div>
     </main>
   );
