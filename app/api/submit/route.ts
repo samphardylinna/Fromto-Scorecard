@@ -106,7 +106,12 @@ export async function POST(request: NextRequest) {
 
     if (upstreamError) {
       console.error("Apps Script webapp rejected the submission", upstream.status, upstreamText);
-      return NextResponse.json({ error: "Failed to record submission" }, { status: 502 });
+      // TEMPORARY — surfacing the raw upstream response to debug the Apps
+      // Script update. Revert before this ships for real.
+      return NextResponse.json(
+        { error: "Failed to record submission", debugStatus: upstream.status, debugBody: upstreamText.slice(0, 1500) },
+        { status: 502 }
+      );
     }
   } catch (error) {
     console.error("Failed to reach Apps Script webapp", error);
