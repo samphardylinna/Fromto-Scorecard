@@ -16,6 +16,7 @@ const ANSWERS_STORAGE_KEY = "scorecard_answers";
 const CONTACT_STORAGE_KEY = "scorecard_contact";
 const SUBMITTED_FLAG_KEY = "scorecard_submitted";
 const SEED_STORAGE_KEY = "scorecard_seed";
+const SUBMISSION_ID_STORAGE_KEY = "scorecard_submission_id";
 
 function buildDummyAnswers(): Answer[] {
   return QUESTIONS.map((q): Answer => {
@@ -44,6 +45,7 @@ export default function DevNav() {
         CONTACT_STORAGE_KEY,
         JSON.stringify({ firstName: "Dev", lastName: "Preview", email: "dev-preview@example.com" })
       );
+      window.sessionStorage.setItem(SUBMISSION_ID_STORAGE_KEY, crypto.randomUUID());
     }
     router.push(target);
   }
@@ -53,6 +55,7 @@ export default function DevNav() {
     window.sessionStorage.removeItem(CONTACT_STORAGE_KEY);
     window.sessionStorage.removeItem(SUBMITTED_FLAG_KEY);
     window.sessionStorage.removeItem(SEED_STORAGE_KEY);
+    window.sessionStorage.removeItem(SUBMISSION_ID_STORAGE_KEY);
     router.push("/");
   }
 

@@ -11,6 +11,7 @@ import type { Answer, Topic } from "@/lib/scorecard/types";
 const CONTACT_STORAGE_KEY = "scorecard_contact";
 const ANSWERS_STORAGE_KEY = "scorecard_answers";
 const SUBMITTED_FLAG_KEY = "scorecard_submitted";
+const SUBMISSION_ID_STORAGE_KEY = "scorecard_submission_id";
 
 const TOPIC_LABELS: Record<Topic, string> = {
   culture: "Brand values in culture",
@@ -19,43 +20,43 @@ const TOPIC_LABELS: Record<Topic, string> = {
 };
 
 const CTA_COPY = {
-  book_call: {
-    heading: "Why don't you talk with us more to see how we can help you develop further?",
-    action: "Start the conversation",
-    href: "#", // placeholder — booking link to be supplied
-  },
-  reading: {
-    heading: "Have you read...",
-    action: "See recommended reading",
-    href: "#", // placeholder — final copy/link to be supplied
-  },
-} as const;
+  heading: "Why don't you talk with us more to see how we can help you develop further?",
+  action: "Start the conversation",
+};
+
+const HOME_URL = "https://fromto.fi";
 
 export default function ResultsPage() {
   const [answers, setAnswers] = useState<Answer[] | null>(null);
   const [contact, setContact] = useState<{ firstName: string; lastName: string; email: string } | null>(
     null
   );
+  const [conversationStarted, setConversationStarted] = useState(false);
 
   useEffect(() => {
     const rawAnswers = window.sessionStorage.getItem(ANSWERS_STORAGE_KEY);
     const rawContact = window.sessionStorage.getItem(CONTACT_STORAGE_KEY);
     setAnswers(rawAnswers ? JSON.parse(rawAnswers) : []);
     setContact(rawContact ? JSON.parse(rawContact) : null);
+
+    // Normally set when the contact step is submitted; fall back to
+    // generating one here so a direct/odd landing on this page still works.
+    if (!window.sessionStorage.getItem(SUBMISSION_ID_STORAGE_KEY)) {
+      window.sessionStorage.setItem(SUBMISSION_ID_STORAGE_KEY, crypto.randomUUID());
+    }
   }, []);
 
   const scores = useMemo(() => (answers ? computeScores(answers) : null), [answers]);
   const insights = useMemo(() => (answers ? selectInsights(answers) : []), [answers]);
 
-  useEffect(() => {
+  function submitToApi(wantsContact: boolean) {
     if (!answers || !contact || !scores) return;
-    if (window.sessionStorage.getItem(SUBMITTED_FLAG_KEY)) return;
-
-    window.sessionStorage.setItem(SUBMITTED_FLAG_KEY, "true");
+    const submissionId = window.sessionStorage.getItem(SUBMISSION_ID_STORAGE_KEY) ?? crypto.randomUUID();
     fetch("/api/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        submissionId,
         firstName: contact.firstName,
         lastName: contact.lastName,
         email: contact.email,
@@ -65,13 +66,30 @@ export default function ResultsPage() {
         productScore: scores.byTopic.productMatching.scaled,
         finalFiveScore: scores.finalFive.total,
         branch: scores.finalFive.branch,
+        wantsContact,
         answers: formatAnswersForExport(answers),
       }),
     }).catch(() => {
       // Best-effort: a failed lead-capture POST shouldn't block the respondent
       // from seeing their own results.
     });
+  }
+
+  useEffect(() => {
+    if (!answers || !contact || !scores) return;
+    if (window.sessionStorage.getItem(SUBMITTED_FLAG_KEY)) return;
+
+    window.sessionStorage.setItem(SUBMITTED_FLAG_KEY, "true");
+    submitToApi(false);
   }, [answers, contact, scores]);
+
+  function handleStartConversation() {
+    setConversationStarted(true);
+    // Same submissionId as the initial page-load submit, so the Apps
+    // Script updates that row's "Wants Contact" cell instead of appending
+    // a duplicate one.
+    submitToApi(true);
+  }
 
   if (!answers || !scores) {
     return (
@@ -92,8 +110,6 @@ export default function ResultsPage() {
       </main>
     );
   }
-
-  const cta = CTA_COPY[scores.finalFive.branch];
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center px-6 py-16 text-center">
@@ -120,10 +136,23 @@ export default function ResultsPage() {
       </div>
 
       <div className="mt-16 w-full rounded-2xl border-2 border-black p-8">
-        <h2 className="text-balance font-heading text-2xl font-bold">{cta.heading}</h2>
-        <div className="mt-6">
-          <Button href={cta.href}>{cta.action}</Button>
-        </div>
+        {conversationStarted ? (
+          <>
+            <h2 className="text-balance font-heading text-2xl font-bold">
+              Thank you, we will be in touch with you within the next few days.
+            </h2>
+            <div className="mt-6">
+              <Button href={HOME_URL}>Return to fromto.fi</Button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="text-balance font-heading text-2xl font-bold">{CTA_COPY.heading}</h2>
+            <div className="mt-6">
+              <Button onClick={handleStartConversation}>{CTA_COPY.action}</Button>
+            </div>
+          </>
+        )}
       </div>
     </main>
   );

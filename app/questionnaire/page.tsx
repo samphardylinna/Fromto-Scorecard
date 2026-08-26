@@ -14,6 +14,7 @@ type Contact = { firstName: string; lastName: string; email: string };
 
 const CONTACT_STORAGE_KEY = "scorecard_contact";
 const ANSWERS_STORAGE_KEY = "scorecard_answers";
+const SUBMISSION_ID_STORAGE_KEY = "scorecard_submission_id";
 
 export default function QuestionnairePage() {
   const router = useRouter();
@@ -55,6 +56,11 @@ export default function QuestionnairePage() {
       email: contact.email,
     };
     window.sessionStorage.setItem(CONTACT_STORAGE_KEY, JSON.stringify(trimmedContact));
+    // One id per completed attempt, generated here (the start of a fresh
+    // attempt) so the results page can send it with both the initial
+    // submission and the later "wants contact" update, letting the Apps
+    // Script find and update the same Sheet row instead of appending twice.
+    window.sessionStorage.setItem(SUBMISSION_ID_STORAGE_KEY, crypto.randomUUID());
     setStepIndex(1);
   }
 

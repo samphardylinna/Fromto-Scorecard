@@ -3,6 +3,11 @@ import { z } from "zod";
 import { isWorkEmail } from "@/lib/scorecard/consumerEmailDomains";
 
 const SubmitSchema = z.object({
+  // Stable per completed attempt (generated client-side once, at the start
+  // of the attempt) — lets the Apps Script find and update the same Sheet
+  // row for the later "wants contact" submission instead of appending a
+  // duplicate.
+  submissionId: z.string().trim().min(1).max(100),
   firstName: z.string().trim().min(1).max(200),
   lastName: z.string().trim().min(1).max(200),
   email: z.string().trim().email().max(320),
@@ -12,6 +17,7 @@ const SubmitSchema = z.object({
   productScore: z.number(),
   finalFiveScore: z.number(),
   branch: z.enum(["book_call", "reading"]),
+  wantsContact: z.boolean().default(false),
   // Every question's answer, keyed by question id (e.g. "q1") — human-
   // readable option labels, not internal ids. Capped generously per value;
   // the free-text question (Q15) is separately capped client-side.
@@ -63,6 +69,7 @@ export async function POST(request: NextRequest) {
     const { answers, ...scores } = rest;
     const params = new URLSearchParams({
       secret: sharedSecret,
+      submissionId: scores.submissionId,
       email,
       location,
       firstName: scores.firstName,
@@ -73,6 +80,7 @@ export async function POST(request: NextRequest) {
       productScore: String(scores.productScore),
       finalFiveScore: String(scores.finalFiveScore),
       branch: scores.branch,
+      wantsContact: String(scores.wantsContact),
       ...answers,
     });
 
