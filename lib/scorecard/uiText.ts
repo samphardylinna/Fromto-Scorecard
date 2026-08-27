@@ -91,7 +91,7 @@ export const UI_TEXT = {
       noResultsHeading: "Ei vielä tuloksia",
       noResultsBody: "Tee testi ensin nähdäksesi pisteesi.",
       takeTestNow: "Aloita testi",
-      overallHeading: "Kokonaispisteesi kulttuuripohjaisesta brändistä on:",
+      overallHeading: "Kokonaispisteesi sisäinen brändistä on:",
       overallGaugeLabel: "Yhteensä",
       topicLabels: {
         culture: "Brändin arvot kulttuurissa",
