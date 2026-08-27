@@ -18,15 +18,17 @@ import type { Insight, Question } from "./types";
  * nothing reads either source at runtime.
  *
  * `promptFi` / `labelFi` / `textFi` (on Question, AnswerOption, and Insight
- * respectively) are draft Finnish translations, done by Claude pending
- * review by the human translator — replace with their copy once it's in.
+ * respectively) are the human translator's reviewed Finnish, from the
+ * "translate Q&A" and "translate insights" sheets — each sheet's "Updated
+ * Finnish" column where filled in, otherwise its first-pass "Finnish"
+ * column.
  */
 export const QUESTIONS: Question[] = [
   {
     id: "q1",
     order: 1,
     prompt: "How many times a week do you talk with an employee about your brand's story and values?",
-    promptFi: "Kuinka monta kertaa viikossa keskustelet työntekijän kanssa brändisi tarinasta ja arvoista?",
+    promptFi: "Kuinka usein keskustelet työntekijäsi kanssa brändisi tarinasta ja arvoista?",
     kind: "single",
     topics: ["culture"],
     randomizeOrder: true,
@@ -52,11 +54,11 @@ export const QUESTIONS: Question[] = [
       {
         id: "q2-b",
         label: "More than half, but still a lot don't",
-        labelFi: "Yli puolet, mutta moni ei silti tunne",
+        labelFi: "Yli puolet, mutta silti moni ei",
         score: 2,
       },
-      { id: "q2-c", label: "Most of them", labelFi: "Suurin osa heistä", score: 3 },
-      { id: "q2-d", label: "Yes, all of them", labelFi: "Kyllä, kaikki", score: 4 },
+      { id: "q2-c", label: "Most of them", labelFi: "Suurin osa", score: 3 },
+      { id: "q2-d", label: "Yes, all of them", labelFi: "Kaikki", score: 4 },
     ],
   },
   {
@@ -65,7 +67,7 @@ export const QUESTIONS: Question[] = [
     prompt:
       "How many ways can you name where the brand values concretely affect the way you personally work?",
     promptFi:
-      "Kuinka monta konkreettista tapaa osaat nimetä, joilla brändiarvot vaikuttavat omaan työskentelyysi?",
+      "Kuinka monella tapaa brändisi arvot vaikuttavat konkreettisesti siihen, miten itse työskentelet?",
     kind: "single",
     topics: ["culture"],
     randomizeOrder: true,
@@ -76,10 +78,10 @@ export const QUESTIONS: Question[] = [
       {
         id: "q3-c",
         label: "I can easily name 5 to 10 ways",
-        labelFi: "Osaan helposti nimetä 5–10 tapaa",
+        labelFi: "Osaan helposti nimetä 5-10 tapaa",
         score: 3,
       },
-      { id: "q3-d", label: "More than 10", labelFi: "Yli 10", score: 4 },
+      { id: "q3-d", label: "More than 10", labelFi: "Yli 10:llä", score: 4 },
     ],
   },
   {
@@ -87,7 +89,7 @@ export const QUESTIONS: Question[] = [
     order: 4,
     prompt: "In less than a minute, can you explain to a 10-year-old the difference your company makes to the world?",
     promptFi:
-      "Pystytkö alle minuutissa selittämään 10-vuotiaalle, millaisen eron yrityksesi tekee maailmaan?",
+      "Pystytkö selitäämään alle minuutissa 10-vuotiaalle, miten yrityksesi muuttaa maailmaa?",
     kind: "single",
     topics: ["culture", "marketing"],
     randomizeOrder: true,
@@ -101,19 +103,19 @@ export const QUESTIONS: Question[] = [
     id: "q5",
     order: 5,
     prompt: "How much of your onboarding process is used for your brand story and values?",
-    promptFi: "Kuinka suuri osa perehdytysprosessistanne käsittelee brändinne tarinaa ja arvoja?",
+    promptFi: "Kuinka suuri osa uuden työntekijän perehdytysprosessista käytetään brändisi tarinaan ja arvoihin?",
     kind: "single",
     topics: ["culture"],
     randomizeOrder: true,
     randomizeOptions: false,
     options: [
-      { id: "q5-a", label: "Hardly any time", labelFi: "Lähes ei lainkaan", score: 1 },
-      { id: "q5-b", label: "Around about a quarter", labelFi: "Noin neljännes", score: 2 },
-      { id: "q5-c", label: "About a third", labelFi: "Noin kolmannes", score: 3 },
+      { id: "q5-a", label: "Hardly any time", labelFi: "Tuskin yhtään", score: 1 },
+      { id: "q5-b", label: "Around about a quarter", labelFi: "Suunnilleen neljännes", score: 2 },
+      { id: "q5-c", label: "About a third", labelFi: "Noin kolmasosa", score: 3 },
       {
         id: "q5-d",
         label: "More than half of the time, this is very important for us",
-        labelFi: "Yli puolet ajasta – tämä on meille erittäin tärkeää",
+        labelFi: "Yli puolet, koemme tämän erittäin tärkeäksi",
         score: 4,
       },
     ],
@@ -140,15 +142,15 @@ export const QUESTIONS: Question[] = [
     prompt:
       "Your product/service should prove your brand to be true, how many product features can you name which do that?",
     promptFi:
-      "Tuotteesi/palvelusi pitäisi todistaa brändisi todeksi – kuinka monta tuoteominaisuutta osaat nimetä, jotka tekevät niin?",
+      "Tuotteesi/palvelusi pitäisi todistaa brändisi todeksi. Montako tällaista brändiäsi tukevaa tuoteominaisuutta voit nimetä?",
     kind: "single",
     topics: ["productMatching"],
     randomizeOrder: true,
     randomizeOptions: false,
     options: [
-      { id: "q7-a", label: "None", labelFi: "Ei yhtään", score: 1 },
+      { id: "q7-a", label: "None", labelFi: "En yhtään", score: 1 },
       { id: "q7-b", label: "Less than 5", labelFi: "Alle 5", score: 2 },
-      { id: "q7-c", label: "Between 6 and 10", labelFi: "6–10", score: 3 },
+      { id: "q7-c", label: "Between 6 and 10", labelFi: "6-10", score: 3 },
       { id: "q7-d", label: "More than 10", labelFi: "Yli 10", score: 4 },
     ],
   },
@@ -158,7 +160,7 @@ export const QUESTIONS: Question[] = [
     prompt:
       "Your brand values show up clearly in your customer support and guide every interaction with a customer.",
     promptFi:
-      "Brändiarvosi näkyvät selvästi asiakastuessanne ja ohjaavat jokaista asiakaskohtaamista.",
+      "Näkyvätkö brändisi arvot selkeästi asiakastuessasi ja ohjaavatko ne jokaista asiakaskohtaamista?",
     kind: "single",
     topics: ["productMatching"],
     randomizeOrder: true,
@@ -172,13 +174,13 @@ export const QUESTIONS: Question[] = [
     id: "q9",
     order: 9,
     prompt: "When designing your product, you know exactly the kind of person you're aiming to delight.",
-    promptFi: "Kun suunnittelette tuotettanne, tiedätte tarkalleen, millaista ihmistä haluatte ilahduttaa.",
+    promptFi: "Tuotetta suunnitellessasi tiedätkö tarkalleen, minkälaista henkilöä pyrit ilahduttamaan?",
     kind: "single",
     topics: ["productMatching"],
     randomizeOrder: true,
     randomizeOptions: false,
     options: [
-      { id: "q9-a", label: "No", labelFi: "Ei", score: 2 },
+      { id: "q9-a", label: "No", labelFi: "En", score: 2 },
       { id: "q9-b", label: "Yes", labelFi: "Kyllä", score: 4 },
     ],
   },
@@ -186,13 +188,13 @@ export const QUESTIONS: Question[] = [
     id: "q10",
     order: 10,
     prompt: "How much of your marketing is about who you are and where you're going?",
-    promptFi: "Kuinka suuri osa markkinoinnistanne kertoo siitä, keitä olette ja minne olette menossa?",
+    promptFi: "Kuinka suuri osa markkinoinnistasi kertoo siitä, kuka yrityksesi on ja mihin se on menossa?",
     kind: "single",
     topics: ["marketing"],
     randomizeOrder: true,
     randomizeOptions: false,
     options: [
-      { id: "q10-a", label: "Hardly anything", labelFi: "Lähes ei mitään", score: 1 },
+      { id: "q10-a", label: "Hardly anything", labelFi: "Tuskin yhtään", score: 1 },
       { id: "q10-b", label: "A little bit", labelFi: "Vähän", score: 2 },
       {
         id: "q10-c",
@@ -210,7 +212,7 @@ export const QUESTIONS: Question[] = [
     id: "q11",
     order: 11,
     prompt: "Which of the following best describes your current situation?",
-    promptFi: "Mikä seuraavista kuvaa parhaiten nykytilannettanne?",
+    promptFi: "Mikä seuraavista kuvaa parhaiten nykytilannettasi brändiä ajatellen?",
     kind: "single",
     topics: [],
     randomizeOrder: false,
@@ -225,7 +227,8 @@ export const QUESTIONS: Question[] = [
       {
         id: "q11-b",
         label: "It all goes fine as long as I'm involved, the moment I step out the wheels fall off",
-        labelFi: "Kaikki sujuu, kunhan olen itse mukana – heti kun vetäydyn, homma hajoaa",
+        labelFi:
+          "Kaikki sujuu hyvin niin kauan kuin olen itse mukana, mutta heti kun jään taka-alalle, homma hajoaa",
         score: 2,
       },
       {
@@ -233,7 +236,7 @@ export const QUESTIONS: Question[] = [
         label:
           "We've done good, even though we've grown a lot, although I'd like to find a way to make it more repeatable.",
         labelFi:
-          "Olemme pärjänneet hyvin kasvusta huolimatta, mutta haluaisin löytää tavan tehdä siitä toistettavampaa.",
+          "Olemme pärjänneet hyvin, vaikka olemmekin kasvaneet paljon. Haluaisin silti löytää tavan sujuvampaan toistettavuuteen.",
         score: 3,
       },
       {
@@ -257,7 +260,7 @@ export const QUESTIONS: Question[] = [
       {
         id: "q12-a",
         label: "This isn't really a focus for us",
-        labelFi: "Tämä ei ole meille varsinainen painopiste",
+        labelFi: "Tämä ei oikeastaan ole fokuksessa meillä",
         score: 1,
       },
       {
@@ -277,7 +280,7 @@ export const QUESTIONS: Question[] = [
       {
         id: "q12-d",
         label: "A brand our core customers will love and I won't rest till we've built it",
-        labelFi: "Brändi, jota ydinasiakkaamme rakastavat – enkä lepää ennen kuin olemme sen rakentaneet",
+        labelFi: "Brändi, jota ydinasiakkaamme rakastavat enkä lepää ennen kuin olemme rakentaneet sen",
         score: 4,
       },
     ],
@@ -286,18 +289,18 @@ export const QUESTIONS: Question[] = [
     id: "q13",
     order: 13,
     prompt: "What's stopping you get there? (select up to 3)",
-    promptFi: "Mikä estää teitä pääsemästä sinne? (valitse enintään 3)",
+    promptFi: "Mikä estää sinua saavuttamasta sitä? (Valitse enintään 3)",
     kind: "multi",
     topics: [],
     randomizeOrder: false,
     randomizeOptions: true,
     maxSelections: 3,
     options: [
-      { id: "q13-a", label: "This is low priority for us", labelFi: "Tämä on meille matala prioriteetti", score: -3 },
+      { id: "q13-a", label: "This is low priority for us", labelFi: "Se ei ole meille tärkein prioriteetti", score: -3 },
       {
         id: "q13-b",
         label: "We don't have the time to focus on this",
-        labelFi: "Meillä ei ole aikaa keskittyä tähän",
+        labelFi: "Meillä ei ole aikaa keskittyä siihen",
         score: -1,
       },
       {
@@ -319,7 +322,7 @@ export const QUESTIONS: Question[] = [
         labelFi: "Emme tunnu tekevän oikeita asioita",
         score: 2,
       },
-      { id: "q13-g", label: "We don't have the know how", labelFi: "Meiltä puuttuu osaaminen", score: 3 },
+      { id: "q13-g", label: "We don't have the know how", labelFi: "Meillä ei ole osaamista", score: 3 },
     ],
   },
   {
@@ -335,25 +338,25 @@ export const QUESTIONS: Question[] = [
       {
         id: "q14-a",
         label: "A process our team can implement themselves",
-        labelFi: "Prosessi, jonka tiimimme voi toteuttaa itse",
+        labelFi: "Prosessi, jonka tiimimme voi ottaa käyttöön itse",
         score: 1,
       },
       {
         id: "q14-b",
         label: "Online workshops where I can learn to do this myself",
-        labelFi: "Verkkotyöpajat, joissa opin tekemään tämän itse",
+        labelFi: "Verkkotyöpajat, joissa voin oppia tekemään tämän itse",
         score: 2,
       },
       {
         id: "q14-c",
         label: "In-house brand director who would develop this for us",
-        labelFi: "Talon sisäinen brändijohtaja, joka kehittäisi tämän meille",
+        labelFi: "Talon sisäinen brändijohtaja, joka tekisi kehitystyön",
         score: 3,
       },
       {
         id: "q14-d",
         label: "A fully outsourced solution where somebody will come in and fix this for us",
-        labelFi: "Täysin ulkoistettu ratkaisu, jossa joku tulee hoitamaan tämän puolestamme",
+        labelFi: "Täysin ulkoistettu ratkaisu, jossa asiantuntija hoitaa asian puolestamme",
         score: 4,
       },
     ],
@@ -397,7 +400,7 @@ export const INSIGHTS: Insight[] = [
     ],
     text: "Make a conscious effort to coach team members to consider how to do a task in a manner that not just supports your brand values, but amplifies it — target making it a natural thought process for everyone in the company.",
     textFi:
-      "Panosta tietoisesti siihen, että valmennat tiimin jäseniä pohtimaan, miten tehtävä voidaan tehdä tavalla, joka ei vain tue brändiarvojanne vaan vahvistaa niitä — tavoitteena on tehdä tästä luonnollinen ajattelutapa koko yritykselle.",
+      "Panosta tietoisesti siihen, että valmennat tiimin jäseniä pohtimaan, miten tehtävät hoidetaan tavalla, joka ei vain tue brändisi arvoja vaan vahvistaa niitä — tavoitteena tehdä tällaisesta luonnollinen ajattelutapa kaikille yrityksessä.",
   },
   {
     id: "IN2",
@@ -409,7 +412,7 @@ export const INSIGHTS: Insight[] = [
     ],
     text: "Take time to consider and write up how your actions and work habits support, or fail to support, the brand values. Be open with the team about this, especially your shortcomings. Show them you're working on it and encourage them to do the same. Remember, only bad stuff flows down the hill; the stuff worth having must be grown upwards.",
     textFi:
-      "Käytä aikaa pohtiaksesi ja kirjataksesi ylös, miten omat toimintatapasi ja työtottumuksesi tukevat — tai eivät tue — brändiarvoja. Ole tästä avoin tiimille, erityisesti omista puutteistasi. Näytä heille, että työskentelet asian parissa, ja kannusta heitä tekemään samoin. Muista: vain huonot asiat valuvat alaspäin, hyvät asiat on kasvatettava ylöspäin.",
+      "Pohdi ajan kanssa ja kirjaa ylös, miten omat toimintatapasi ja tottumuksesi tukevat – tai eivät tue – brändin arvoja. Ole avoin tiimillesi tästä, erityisesti omista puutteistasi. Näytä heille, että teet töitä asian eteen ja rohkaise heitä samaan. Muista, että vain huono valuu luonnostaan alas päin – kaikki mikä on hyvää, pitää kasvattaa ylös päin.",
   },
   {
     id: "IN3",
@@ -420,7 +423,7 @@ export const INSIGHTS: Insight[] = [
     ],
     text: "Continue taking the time to work with team members on how the brand values concretely affect their work. Share specific examples from your own experience of how you shape your work to support the brand.",
     textFi:
-      "Jatka ajan käyttämistä yhdessä tiimin kanssa siihen, miten brändiarvot konkreettisesti vaikuttavat heidän työhönsä. Jaa omakohtaisia esimerkkejä siitä, miten muokkaat omaa työtäsi tukemaan brändiä.",
+      "Käytä jatkossakin aikaa siihen, että käyt tiimin jäsenten kanssa läpi, miten brändin arvot konkreettisesti vaikuttavat heidän työhönsä. Jaa omasta kokemuksestasi konkreettisia esimerkkejä siitä, miten muokkaat työtäsi tukemaan brändiä.",
   },
   {
     id: "IN4",
@@ -430,7 +433,7 @@ export const INSIGHTS: Insight[] = [
     ],
     text: "Everything worth having in this world grows upwards; it doesn't flow down. Work with your leadership team to encourage them to consider how the brand values affect their work so it doesn't get stuck at your level. Give them the task of modelling it and teaching their team — the best way to learn something is to teach it.",
     textFi:
-      "Kaikki arvokas tässä maailmassa kasvaa ylöspäin — se ei valu alas. Työskentele johtoryhmäsi kanssa ja kannusta heitä pohtimaan, miten brändiarvot vaikuttavat heidän työhönsä, jotta asia ei jää jumiin omalle tasollesi. Anna heille tehtäväksi näyttää esimerkkiä ja opettaa asiaa omalle tiimilleen — paras tapa oppia jotain on opettaa sitä.",
+      "Kaikki arvokas tässä maailmassa kasvaa ylöspäin — se ei valu alaspäin. Työskentele johdon tiimin kanssa ja kannusta heitä pohtimaan, miten brändin arvot vaikuttavat heidän työhönsä, jotta asia ei jää jumiin sinun tasollesi. Anna heille tehtäväksi näyttää esimerkkiä ja opettaa se omalle tiimilleen — paras tapa oppia jokin asia on opettaa se muille.",
   },
   {
     id: "IN5",
@@ -441,7 +444,7 @@ export const INSIGHTS: Insight[] = [
     ],
     text: "Everyone knows your brand values and story, but do they know how to apply them? Take the time to sit down with people and coach them through their day-to-day tasks, working through how the brand values and story affect the work they're doing.",
     textFi:
-      "Kaikki tuntevat brändinne arvot ja tarinan, mutta osaavatko he soveltaa niitä? Käytä aikaa istuaksesi alas ihmisten kanssa ja valmenna heitä päivittäisissä tehtävissä käymällä läpi, miten brändiarvot ja -tarina vaikuttavat heidän työhönsä.",
+      "Kaikki tuntevat brändisi arvot ja tarinan, mutta osaavatko he soveltaa niitä? Ota aikaa ja valmenna henkilöstöäsi päivittäisissä tehtävissä käymällä läpi, miten brändin arvot ja tarina vaikuttavat heidän tekemäänsä työhön.",
   },
   {
     id: "IN6",
@@ -453,7 +456,7 @@ export const INSIGHTS: Insight[] = [
     ],
     text: "Is your brand story where you come from, where you're going, and what you want to achieve in the world — told as a story? Or is it still on a piece of paper from the boardroom table? Work on presenting your strategy and story so even a child could understand it. People get inspired by stories, not statistics. Give them a story.",
     textFi:
-      "Kerrotaanko brändinne tarina — mistä tulette, minne olette menossa ja mitä haluatte saavuttaa maailmassa — todella tarinana? Vai onko se yhä vain hallituksen pöydältä löytyvä paperi? Työstä strategiaasi ja tarinaasi niin, että jopa lapsi ymmärtäisi sen. Ihmiset innostuvat tarinoista, eivät tilastoista. Anna heille tarina.",
+      "Kerrotaanko brändisi tarina — mistä tulette, minne olette menossa ja mitä haluatte saavuttaa maailmassa — tarinan muodossa? Vai onko se yhä vain paperilla johtoryhmän pöydällä? Työstä strategiaasi ja tarinaasi niin, että lapsikin ymmärtäisi sen. Ihmiset innostuvat tarinoista, eivät tilastoista. Anna heille tarina.",
   },
   {
     id: "IN7",
@@ -466,7 +469,7 @@ export const INSIGHTS: Insight[] = [
     ],
     text: "A well-crafted story works for investors and employees as well as customers. How well do you see the same story repeated across your marketing? Make sure the same message is being repeated across all functions of the company.",
     textFi:
-      "Hyvin rakennettu tarina toimii niin sijoittajille, työntekijöille kuin asiakkaillekin. Kuinka hyvin näet saman tarinan toistuvan markkinoinnissasi? Varmista, että sama viesti toistuu yrityksen kaikissa toiminnoissa.",
+      "Hyvin rakennettu tarina toimii sijoittajille ja työntekijöille yhtä lailla kuin asiakkaillekin. Kuinka hyvin näet saman tarinan toistuvan kaikessa markkinoinnissasi? Varmista, että sama viesti toistuu yrityksen kaikissa toiminnoissa.",
   },
   {
     id: "IN8",
@@ -481,7 +484,7 @@ export const INSIGHTS: Insight[] = [
     ],
     text: "You're putting a lot of time into onboarding your employees into the brand value and story, but it's not making its way through to the customers. Consider how you coach your team members on day-to-day tasks and strategic goals — is there a weak link in the story-telling chain?",
     textFi:
-      "Käytätte paljon aikaa työntekijöiden perehdyttämiseen brändiarvoihin ja -tarinaan, mutta se ei tunnu välittyvän asiakkaille asti. Pohdi, miten valmennat tiimin jäseniä päivittäisissä tehtävissä ja strategisissa tavoitteissa — onko tarinankerronnan ketjussa heikko lenkki?",
+      "Käytätte paljon aikaa perehdyttääksenne työntekijänne brändin arvoihin ja tarinaan, mutta se ei välity asiakkaille asti. Pohdi, miten valmennat tiimin jäseniä päivittäisissä tehtävissä ja strategisissa tavoitteissa — onko tarinankerronnan ketjussa heikko lenkki?",
   },
   {
     id: "IN9",
@@ -493,7 +496,7 @@ export const INSIGHTS: Insight[] = [
     ],
     text: "Your brand is one of the key differentiators for your product and one of the things that allows you to charge more than your competitors. If you can't name many features that support your brand, your sales team and customers likely can't either — and won't be able to justify your pricing. Work with your product team to connect features to your brand values, then take that message to sales.",
     textFi:
-      "Brändinne on yksi tuotteenne keskeisistä erottautumistekijöistä ja yksi syy siihen, että voitte pyytää kilpailijoita korkeampaa hintaa. Jos ette itse osaa nimetä montaa brändiä tukevaa ominaisuutta, tuskin myyntitiiminne tai asiakkaannekaan osaavat — eivätkä he silloin pysty perustelemaan hintaanne. Työskentele tuotetiimin kanssa yhdistääksesi ominaisuudet brändiarvoihin ja vie viesti sitten myyntiin.",
+      "Brändisi on yksi tuotteesi keskeisistä erottautumistekijöistä ja yksi niistä asioista, jotka mahdollistavat korkeamman hinnoittelun kuin kilpailijoillasi. Jos et osaa nimetä montaa ominaisuutta, jotka tukevat brändiäsi, myyntitiimisi tai asiakkaasikaan tuskin osaavat — eivätkä he pysty perustelemaan hinnoitteluasi. Työskentele tuotetiimisi kanssa yhdistääksesi ominaisuudet brändisi arvoihin, ja vie viesti sen jälkeen myynnille.",
   },
   {
     id: "IN10",
@@ -504,7 +507,7 @@ export const INSIGHTS: Insight[] = [
     ],
     text: "There's an art to knowing how many features you need in your products and services to make it feel like the brand. Work with your team to understand what your strategy demands your product has and what your brand requires — before you start any design work. The product is there to complete the strategy, not the strategy to sell the product.",
     textFi:
-      "On oma taitolajinsa tietää, kuinka monta ominaisuutta tuotteessanne tai palvelussanne tarvitaan, jotta se tuntuu brändiltä. Työskentele tiimisi kanssa ymmärtääksesi, mitä strategianne edellyttää tuotteelta ja mitä brändinne vaatii — ennen kuin aloitatte suunnittelutyön. Tuote on olemassa toteuttaakseen strategian, ei strategia myydäkseen tuotetta.",
+      "On oma taitolajinsa tietää, kuinka monta ominaisuutta tuotteesi tai palvelusi tarvitsee tuntuakseen brändiltä. Työskentele tiimisi kanssa ymmärtääksesi, mitä strategianne vaatii tuotteeltanne ja mitä brändinne edellyttää — ennen kuin aloitatte suunnittelutyön. Tuote on olemassa täydentäkseen strategiaa, strategia ei ole tuotteen myyntiä varten.",
   },
   {
     id: "IN11",
@@ -514,7 +517,7 @@ export const INSIGHTS: Insight[] = [
     ],
     text: "We are all most sensitive when we're upset. Customer support is the most important part of your business for improving your brand perception. Work hard with the team so they know what the brand is, they experience the brand inside the company, and they have the freedom to make it happen.",
     textFi:
-      "Olemme kaikki herkimmillämme silloin, kun olemme harmissamme. Asiakastuki on liiketoimintanne tärkein osa-alue brändimielikuvan parantamisessa. Työskentele tiimin kanssa, jotta he tietävät, mikä brändi on, kokevat sen myös yrityksen sisällä, ja heillä on vapaus toteuttaa sitä.",
+      "Meille kaikille ärsyyntyminen on herkkä paikka. Asiakastuki on liiketoimintasi tärkein osa-alue brändimielikuvan parantamisessa. Tee kovasti töitä tiimisi kanssa, jotta he tietävät, mikä brändi on, he voivat kokea sen yrityksen sisällä ja heillä on vapaus toteuttaa sitä.",
   },
   {
     id: "IN12",
@@ -524,7 +527,7 @@ export const INSIGHTS: Insight[] = [
     ],
     text: "Indifference is the most expensive and least effective outcome. Make sure your product is designed for those who love your brand, not just for what it has in it, but for what it says about them when they have it. You can't please everyone. You may have to annoy some people in the pursuit of delighting others.",
     textFi:
-      "Välinpitämättömyys on kallein ja tehottomin lopputulos. Varmista, että tuotteenne on suunniteltu niille, jotka rakastavat brändiänne — ei vain sen ominaisuuksien vuoksi, vaan sen vuoksi, mitä se kertoo heistä, kun he omistavat sen. Kaikkia ei voi miellyttää. Jonkun ärsyttäminen voi olla väistämätöntä, jotta voit ilahduttaa toisia.",
+      "Välinpitämättömyys johtaa kalleimpaan ja tehottomimpaan lopputulokseen. Varmista, että tuotteesi on suunniteltu niille, jotka rakastavat brändiäsi — ei vain sen takia mitä tuotteessa on, vaan sen takia, mitä se kertoo heistä, kun he omistavat sen. Et voi miellyttää kaikkia. Saatat joutua ärsyttämään joitakin ilahduttaaksesi toisia.",
   },
   {
     id: "IN13",
@@ -535,7 +538,7 @@ export const INSIGHTS: Insight[] = [
     ],
     text: "Like attracts like. When the world knows who you are and where you're going, you'll find it much easier to attract customers, employees, and investors who match your business. Keep working with your team to find creative ways to broadcast the difference you're going to make.",
     textFi:
-      "Samanlainen vetää puoleensa samanlaista. Kun maailma tietää, keitä olette ja minne olette menossa, teidän on paljon helpompi houkutella asiakkaita, työntekijöitä ja sijoittajia, jotka sopivat yhteen liiketoimintanne kanssa. Jatka työskentelyä tiimisi kanssa löytääksesi luovia tapoja viestiä siitä muutoksesta, jonka aiotte tehdä.",
+      "Samanlaisuus viehättää. Kun maailma tietää, keitä olette ja minne olette menossa, huomaatte, että on paljon helpompi houkutella asiakkaita, työntekijöitä ja sijoittajia, jotka sopivat yhteen liiketoimintanne kanssa. Jatka työskentelyä tiimisi kanssa löytääksesi luovia tapoja viestiä siitä, miten aiotte muuttaa maailmaa.",
   },
 ];
 
