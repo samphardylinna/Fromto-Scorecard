@@ -6,8 +6,10 @@ import Button from "@/components/scorecard/Button";
 import ChoiceCard from "@/components/scorecard/ChoiceCard";
 import ProgressRail from "@/components/scorecard/ProgressRail";
 import { FREE_TEXT_MAX_LENGTH } from "@/lib/scorecard/exportAnswers";
+import { useLanguage } from "@/lib/scorecard/language";
 import { getOrCreateSessionSeed, getSessionOptionOrder, getSessionQuestionOrder } from "@/lib/scorecard/randomize";
-import type { Answer } from "@/lib/scorecard/types";
+import { UI_TEXT } from "@/lib/scorecard/uiText";
+import type { Answer, AnswerOption, Question } from "@/lib/scorecard/types";
 
 type Contact = { firstName: string; lastName: string; email: string };
 
@@ -17,6 +19,11 @@ const SUBMISSION_ID_STORAGE_KEY = "scorecard_submission_id";
 
 export default function QuestionnairePage() {
   const router = useRouter();
+  const { language } = useLanguage();
+  const t = UI_TEXT[language].questionnaire;
+  const questionPrompt = (q: Question) => (language === "fi" ? q.promptFi : q.prompt);
+  const optionLabel = (o: AnswerOption) => (language === "fi" ? o.labelFi : o.label);
+
   const seed = useMemo(() => getOrCreateSessionSeed(), []);
   const questions = useMemo(() => getSessionQuestionOrder(seed), [seed]);
 
@@ -41,7 +48,7 @@ export default function QuestionnairePage() {
 
   function submitContact() {
     if (!contact.firstName.trim() || !contact.lastName.trim() || !contact.email.trim()) {
-      setContactError("Please fill in all fields.");
+      setContactError(t.fillAllFields);
       return;
     }
     setContactError(null);
@@ -107,15 +114,17 @@ export default function QuestionnairePage() {
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-6 py-16">
-      {!isContactStep && <ProgressRail current={stepIndex} total={questions.length} />}
+    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-6 pb-16 pt-[6px]">
+      {!isContactStep && (
+        <ProgressRail current={stepIndex} total={questions.length} label={t.questionOf(stepIndex, questions.length)} />
+      )}
 
       {isContactStep && (
         <div className="flex flex-col gap-6">
-          <h1 className="font-heading text-3xl font-bold">Before we start</h1>
+          <h1 className="font-heading text-3xl font-bold">{t.beforeWeStart}</h1>
           <div className="flex flex-col gap-6 sm:flex-row">
             <label className="flex flex-1 flex-col gap-2 text-left font-heading text-sm font-semibold uppercase tracking-wide text-jonas-text-muted">
-              First name
+              {t.firstName}
               <input
                 type="text"
                 value={contact.firstName}
@@ -125,7 +134,7 @@ export default function QuestionnairePage() {
               />
             </label>
             <label className="flex flex-1 flex-col gap-2 text-left font-heading text-sm font-semibold uppercase tracking-wide text-jonas-text-muted">
-              Surname
+              {t.surname}
               <input
                 type="text"
                 value={contact.lastName}
@@ -136,7 +145,7 @@ export default function QuestionnairePage() {
             </label>
           </div>
           <label className="flex flex-col gap-2 text-left font-heading text-sm font-semibold uppercase tracking-wide text-jonas-text-muted">
-            Your work email
+            {t.email}
             <input
               type="email"
               value={contact.email}
@@ -146,13 +155,11 @@ export default function QuestionnairePage() {
             />
           </label>
           <p className="text-sm text-jonas-text-muted">
-            By submitting your email, you consent to receive marketing communications from us. You
-            can withdraw your consent at any time via the unsubscribe link in any email we send. See
-            our{" "}
+            {t.consentPrefix}{" "}
             <span className="cursor-not-allowed underline" title="Privacy policy coming soon">
-              privacy policy
+              {t.privacyPolicy}
             </span>{" "}
-            for details.
+            {t.consentSuffix}
           </p>
           {contactError && <p className="text-sm font-medium text-red-700">{contactError}</p>}
         </div>
@@ -160,7 +167,9 @@ export default function QuestionnairePage() {
 
       {question && (
         <div className="flex flex-col gap-6">
-          <h1 className="text-balance font-heading text-2xl font-bold sm:text-3xl">{question.prompt}</h1>
+          <h1 className="text-balance font-heading text-2xl font-bold sm:text-3xl">
+            {questionPrompt(question)}
+          </h1>
 
           {question.kind === "single" && (
             <div className="flex flex-col gap-3">
@@ -168,7 +177,7 @@ export default function QuestionnairePage() {
                 <ChoiceCard
                   key={option.id}
                   kind="single"
-                  label={option.label}
+                  label={optionLabel(option)}
                   selected={currentAnswer?.kind === "single" && currentAnswer.optionId === option.id}
                   onSelect={() => selectSingle(option.id)}
                 />
@@ -180,8 +189,10 @@ export default function QuestionnairePage() {
             <div className="flex flex-col gap-3">
               {question.maxSelections && (
                 <p className="text-sm text-jonas-text-muted">
-                  {(currentAnswer?.kind === "multi" ? currentAnswer.optionIds.length : 0)}/
-                  {question.maxSelections} selected
+                  {t.selectedCount(
+                    currentAnswer?.kind === "multi" ? currentAnswer.optionIds.length : 0,
+                    question.maxSelections
+                  )}
                 </p>
               )}
               {options.map((option) => {
@@ -194,7 +205,7 @@ export default function QuestionnairePage() {
                   <ChoiceCard
                     key={option.id}
                     kind="multi"
-                    label={option.label}
+                    label={optionLabel(option)}
                     selected={selected}
                     disabled={!selected && atCap}
                     onSelect={() => toggleMulti(option.id)}
@@ -209,7 +220,7 @@ export default function QuestionnairePage() {
               <textarea
                 value={currentAnswer?.kind === "text" ? currentAnswer.value : ""}
                 onChange={(e) => setText(e.target.value.slice(0, FREE_TEXT_MAX_LENGTH))}
-                placeholder="Type your answer here..."
+                placeholder={t.freeTextPlaceholder}
                 maxLength={FREE_TEXT_MAX_LENGTH}
                 rows={5}
                 className="w-full rounded-xl border-2 border-jonas-text-muted/30 px-4 py-3 font-serif text-lg focus:border-black focus:outline-none"
@@ -224,10 +235,10 @@ export default function QuestionnairePage() {
 
       <div className="mt-10 flex items-center justify-between">
         <Button variant="secondary" onClick={goBack} disabled={stepIndex === 0}>
-          Back
+          {t.back}
         </Button>
         <Button onClick={goNext} disabled={!canAdvance}>
-          {!isContactStep && stepIndex === questions.length ? "See results" : "Next"}
+          {!isContactStep && stepIndex === questions.length ? t.seeResults : t.next}
         </Button>
       </div>
     </main>

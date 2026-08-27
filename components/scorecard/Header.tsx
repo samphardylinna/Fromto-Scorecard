@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useLanguage } from "@/lib/scorecard/language";
 
 const HOME_URL = "https://fromto.fi";
 
@@ -6,6 +9,8 @@ const HOME_URL = "https://fromto.fi";
 // see Header.tsx in the Webpage repo — but static, since this standalone
 // app has no scroll-driven expand/collapse state to react to.
 export default function Header() {
+  const { language, setLanguage } = useLanguage();
+
   return (
     <header className="sticky top-0 z-50 border-b border-black/10 bg-white">
       <div className="relative mx-auto flex h-[57px] w-full max-w-5xl items-center justify-between px-4">
@@ -15,13 +20,23 @@ export default function Header() {
         </Link>
 
         <div className="flex items-center gap-1 font-mono text-sm font-bold tracking-tight">
-          <span className="text-black" aria-current="true">
+          <button
+            type="button"
+            onClick={() => setLanguage("en")}
+            aria-current={language === "en"}
+            className={language === "en" ? "text-black" : "text-black/40 hover:text-black/70"}
+          >
             En
-          </span>
+          </button>
           <span className="text-black/40">/</span>
-          <span className="cursor-not-allowed text-black/40" title="Finnish coming soon" aria-disabled="true">
+          <button
+            type="button"
+            onClick={() => setLanguage("fi")}
+            aria-current={language === "fi"}
+            className={language === "fi" ? "text-black" : "text-black/40 hover:text-black/70"}
+          >
             Fi
-          </span>
+          </button>
         </div>
       </div>
     </header>

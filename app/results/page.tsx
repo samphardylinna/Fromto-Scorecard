@@ -5,28 +5,23 @@ import Button from "@/components/scorecard/Button";
 import Gauge from "@/components/scorecard/Gauge";
 import { formatAnswersForExport } from "@/lib/scorecard/exportAnswers";
 import { selectInsights } from "@/lib/scorecard/insights";
+import { useLanguage } from "@/lib/scorecard/language";
 import { computeScores } from "@/lib/scorecard/scoring";
-import type { Answer, Topic } from "@/lib/scorecard/types";
+import { UI_TEXT } from "@/lib/scorecard/uiText";
+import type { Answer, Insight, Topic } from "@/lib/scorecard/types";
 
 const CONTACT_STORAGE_KEY = "scorecard_contact";
 const ANSWERS_STORAGE_KEY = "scorecard_answers";
 const SUBMITTED_FLAG_KEY = "scorecard_submitted";
 const SUBMISSION_ID_STORAGE_KEY = "scorecard_submission_id";
 
-const TOPIC_LABELS: Record<Topic, string> = {
-  culture: "Brand values in culture",
-  marketing: "Brand marketing and messaging",
-  productMatching: "Product/service brand matching",
-};
-
-const CTA_COPY = {
-  heading: "Why don't you talk with us more to see how we can help you develop further?",
-  action: "Start the conversation",
-};
-
 const HOME_URL = "https://fromto.fi";
 
 export default function ResultsPage() {
+  const { language } = useLanguage();
+  const t = UI_TEXT[language].results;
+  const insightText = (insight: Insight) => (language === "fi" ? insight.textFi : insight.text);
+
   const [answers, setAnswers] = useState<Answer[] | null>(null);
   const [contact, setContact] = useState<{ firstName: string; lastName: string; email: string } | null>(
     null
@@ -94,7 +89,7 @@ export default function ResultsPage() {
   if (!answers || !scores) {
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center px-6 py-20 text-center">
-        <p className="font-serif text-lg text-jonas-text">Loading your results…</p>
+        <p className="font-serif text-lg text-jonas-text">{t.loading}</p>
       </main>
     );
   }
@@ -102,10 +97,10 @@ export default function ResultsPage() {
   if (answers.length === 0) {
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center px-6 py-20 text-center">
-        <h1 className="font-heading text-2xl font-bold">No results yet</h1>
-        <p className="mt-3 font-serif text-jonas-text">Take the assessment first to see your score.</p>
+        <h1 className="font-heading text-2xl font-bold">{t.noResultsHeading}</h1>
+        <p className="mt-3 font-serif text-jonas-text">{t.noResultsBody}</p>
         <div className="mt-6">
-          <Button href="/questionnaire">Take the test now</Button>
+          <Button href="/questionnaire">{t.takeTestNow}</Button>
         </div>
       </main>
     );
@@ -113,24 +108,22 @@ export default function ResultsPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center px-6 py-16 text-center">
-      <h1 className="text-balance font-heading text-3xl font-bold sm:text-4xl">
-        Your overall culture-based brand score is:
-      </h1>
+      <h1 className="text-balance font-heading text-3xl font-bold sm:text-4xl">{t.overallHeading}</h1>
       <div className="mt-6">
-        <Gauge score={scores.overall.scaled} label="Overall" size="large" />
+        <Gauge score={scores.overall.scaled} label={t.overallGaugeLabel} size="large" />
       </div>
 
       <div className="mt-10 grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
-        {(Object.keys(TOPIC_LABELS) as Topic[]).map((topic) => (
-          <Gauge key={topic} score={scores.byTopic[topic].scaled} label={TOPIC_LABELS[topic]} />
+        {(Object.keys(t.topicLabels) as Topic[]).map((topic) => (
+          <Gauge key={topic} score={scores.byTopic[topic].scaled} label={t.topicLabels[topic]} />
         ))}
       </div>
 
-      <h2 className="mt-16 font-heading text-2xl font-bold">Here&apos;s some things you could work on</h2>
+      <h2 className="mt-16 font-heading text-2xl font-bold">{t.insightsHeading}</h2>
       <div className="mt-6 flex w-full flex-col gap-4 text-left">
         {insights.map((insight) => (
           <p key={insight.id} className="rounded-2xl bg-jonas-cream p-5 font-serif text-jonas-text">
-            {insight.text}
+            {insightText(insight)}
           </p>
         ))}
       </div>
@@ -138,18 +131,16 @@ export default function ResultsPage() {
       <div className="mt-16 w-full rounded-2xl border-2 border-black p-8">
         {conversationStarted ? (
           <>
-            <h2 className="text-balance font-heading text-2xl font-bold">
-              Thank you, we will be in touch with you within the next few days.
-            </h2>
+            <h2 className="text-balance font-heading text-2xl font-bold">{t.thankYou}</h2>
             <div className="mt-6">
-              <Button href={HOME_URL}>Return to fromto.fi</Button>
+              <Button href={HOME_URL}>{t.returnHome}</Button>
             </div>
           </>
         ) : (
           <>
-            <h2 className="text-balance font-heading text-2xl font-bold">{CTA_COPY.heading}</h2>
+            <h2 className="text-balance font-heading text-2xl font-bold">{t.ctaHeading}</h2>
             <div className="mt-6">
-              <Button onClick={handleStartConversation}>{CTA_COPY.action}</Button>
+              <Button onClick={handleStartConversation}>{t.ctaAction}</Button>
             </div>
           </>
         )}

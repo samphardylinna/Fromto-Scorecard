@@ -5,6 +5,8 @@ export type QuestionKind = "single" | "multi" | "text";
 export interface AnswerOption {
   id: string;
   label: string;
+  /** Finnish translation of `label` — draft, pending human-translator review. */
+  labelFi: string;
   /** Points earned if this option is selected. Can be negative (see Q13). */
   score: number;
 }
@@ -14,6 +16,8 @@ export interface Question {
   /** Position in the fixed Miro order — Q1-10 are shuffled, Q11-15 are not. */
   order: number;
   prompt: string;
+  /** Finnish translation of `prompt` — draft, pending human-translator review. */
+  promptFi: string;
   kind: QuestionKind;
   /** Topic gauge(s) this question's score counts toward. Empty for Q11-15. */
   topics: Topic[];
@@ -31,6 +35,8 @@ export interface Insight {
   /** Question + option ids whose selection counts as a "match" for this insight. */
   triggers: { questionId: string; optionId: string }[];
   text: string;
+  /** Finnish translation of `text` — draft, pending human-translator review. */
+  textFi: string;
 }
 
 /** A respondent's answer to one question. */
